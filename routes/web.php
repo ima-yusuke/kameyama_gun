@@ -2,10 +2,10 @@
 
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\MainController;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+//トップページ表示
+Route::get('/', [MainController::class, 'show'])->name('show');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
