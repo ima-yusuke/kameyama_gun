@@ -14,21 +14,11 @@
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
-    <body class="font-sans antialiased flex flex-col h-full">
+    <body class="font-sans antialiased h-full flex flex-col">
         @include('layouts.navigation')
 
-        <!-- Page Content -->
-        <main class="flex-1">
-            <div class="flex w-full h-full">
-                <div class="flex flex-col bg-white shadow-xl py-4 w-[20%]">
-                    {{--サイドメニュー--}}
-                    <x-side-menu-component />
-                </div>
-                <!-- Page Content -->
-                <div class="flex flex-col w-full h-full py-8">
-                    {{ $slot }}
-                </div>
-            </div>
+        <main class="bg-gray-50 flex-1">
+            {{ $slot }}
         </main>
     </body>
 </html>
