@@ -17,14 +17,14 @@
             @if($data["role"]!==0)
                 @continue
             @endif
-            <tr data-gun="{{json_encode($data)}}" onclick="OpenModal(event)">
+            <tr data-gun="{{json_encode($data)}}" data-gun-detail="{{json_encode($data->gunDetail)}}" onclick="OpenModal(event)">
                 <td class="border border-gray-500 px-4 py-2">{{ $data["id"] }}</td>
                 <td class="border border-gray-500 px-4 py-2">{{ $data["name"] }}</td>
-                <td class="border border-gray-500 px-4 py-2">カテゴリー</td>
-                <td class="border border-gray-500 px-4 py-2">口径</td>
-                <td class="border border-gray-500 px-4 py-2">{{ number_format($data['price']) }}</td>
-                <td class="border border-gray-500 px-4 py-2 {{$data['is_stock'] === true ? '':'text-red-500'}}">
-                    {{ $data["is_stock"]===true?"在庫有":"売約済"}}
+                <td class="border border-gray-500 px-4 py-2 bg-red-500">カテゴリー</td>
+                <td class="border border-gray-500 px-4 py-2">{{ $data->gunDetail["diameter"] }}</td>
+                <td class="border border-gray-500 px-4 py-2">￥{{ number_format($data['price']) }}</td>
+                <td class="border border-gray-500 px-4 py-2 {{$data['is_stock'] === 1 ? '':'text-red-500'}}">
+                    {{ $data["is_stock"]===1?"在庫有":"売約済"}}
                 </td>
                 <td class="border border-gray-500 px-4 py-2">{{ $data["note"] }}</td>
             </tr>
@@ -83,5 +83,7 @@
         let data = JSON.parse(e.currentTarget.getAttribute("data-gun"));
         const modalTitle = document.getElementById('modal_title');
         modalTitle.textContent = `${data.name} / モデル R33`;
+
+        console.log(JSON.parse(e.currentTarget.getAttribute("data-gun-detail")));
     }
 </script>
