@@ -1,6 +1,6 @@
 <x-app-layout>
     <section class="w-full h-full flex items-center justify-center py-10">
-        <form method="post" action="{{route("add.gun")}}"  class="w-[90%] flex flex-col gap-2">
+        <form method="post" action="{{route("admin.gun.add")}}"  class="w-[90%] flex flex-col gap-2">
             @csrf
             {{--品名--}}
             <x-dash-form-component :flag="true" title="品名">
