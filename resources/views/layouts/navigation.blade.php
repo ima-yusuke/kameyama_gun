@@ -13,7 +13,7 @@
             <x-dash-nav-li-component icon="fa-solid fa-pen-to-square" title="弾編集" url="admin.gun.show"/>
             <x-dash-nav-li-component icon="fa-solid fa-briefcase" title="その他登録" url="admin.gun.show"/>
             <x-dash-nav-li-component icon="fa-solid fa-pen-to-square" title="その他編集" url="admin.gun.show"/>
-            <x-dash-nav-li-component icon="fa-solid fa-pen-to-square" title="マイページ" url="profile.edit"/>
+            <x-dash-nav-li-component icon="fa-solid fa-user" title="マイページ" url="profile.edit"/>
 
             <form method="POST" action="{{ route('logout') }}">
                 @csrf

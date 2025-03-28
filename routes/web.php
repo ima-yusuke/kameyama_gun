@@ -19,6 +19,7 @@ Route::middleware('auth')->group(function () {
 
 
     Route::get('/dashboard/gun-register', [AdminGunController::class, 'Show'])->name('admin.gun.show');
+    Route::post('/dashboard/gun-register', [AdminGunController::class, 'Add'])->name('add.gun');
 
 });
 
