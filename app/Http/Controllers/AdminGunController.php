@@ -5,12 +5,14 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Item;
 use App\Models\GunDetail;
+use App\Models\Category;
 
 class AdminGunController extends Controller
 {
     public function Show()
     {
-        return view('dash.gun-register');
+        $categories = Category::all();
+        return view('dash.gun-register',compact('categories'));
     }
 
     public function Add(Request $request)
@@ -20,7 +22,7 @@ class AdminGunController extends Controller
         $item->name = $request->name;
         $item->price = $request->price;
         $item->is_stock = $request->is_stock;
-        $item->category_id  = 100;
+        $item->category_id  = $request->category_id;
         $item->note = $request->note;
         $item->save();
 
@@ -35,6 +37,7 @@ class AdminGunController extends Controller
         $gunDetail->diameter = $request->diameter;
         $gunDetail->save();
 
-        return view('dash.gun-register');
+        $categories = Category::all();
+        return view('dash.gun-register',compact('categories'));
     }
 }

@@ -20,7 +20,7 @@
             <tr data-gun="{{json_encode($data)}}" data-gun-detail="{{json_encode($data->gunDetail)}}" onclick="OpenModal(event)">
                 <td class="border border-gray-500 px-4 py-2">{{ $data["id"] }}</td>
                 <td class="border border-gray-500 px-4 py-2">{{ $data["name"] }}</td>
-                <td class="border border-gray-500 px-4 py-2 bg-red-500">カテゴリー</td>
+                <td class="border border-gray-500 px-4 py-2">{{$data->category["name"]}}</td>
                 <td class="border border-gray-500 px-4 py-2">{{ $data->gunDetail["diameter"] }}</td>
                 <td class="border border-gray-500 px-4 py-2">￥{{ number_format($data['price']) }}</td>
                 <td class="border border-gray-500 px-4 py-2 {{$data['is_stock'] === 1 ? '':'text-red-500'}}">

@@ -6,6 +6,19 @@
             <x-dash-form-component :flag="true" title="品名">
                 <input type="text" required placeholder="例）ABC銃" name="name" class="rounded-lg">
             </x-dash-form-component>
+            {{--カテゴリー--}}
+            <x-dash-form-component :flag="true" title="カテゴリー">
+                <select name="category_id" required class="rounded-lg">
+                    @if(is_array($categories) && count($categoies)<1)
+                        <option value="">カテゴリーを登録してください</option>
+                    @else
+                        <option value="">選択してください</option>
+                        @foreach($categories as $category)
+                            <option value="{{$category->id}}">{{$category->name}}</option>
+                        @endforeach
+                    @endif
+                </select>
+            </x-dash-form-component>
             {{--在庫--}}
             <x-dash-form-component :flag="true" title="在庫">
                 <div class="flex items-center gap-4">
