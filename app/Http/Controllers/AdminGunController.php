@@ -93,4 +93,12 @@ class AdminGunController extends Controller
 
         return redirect()->route('admin.gun.edit');
     }
+
+    //銃削除
+    public function Delete($id)
+    {
+        $item = Item::find($id);
+        $item->delete();
+        return redirect()->route('admin.gun.edit');
+    }
 }
