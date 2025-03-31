@@ -5,12 +5,15 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Item;
 use App\Models\GunDetail;
+use App\Models\Category;
+use Illuminate\Support\Facades\Storage;
 
 class AdminGunController extends Controller
 {
     public function Show()
     {
-        return view('dash.gun-register');
+        $categories = Category::all();
+        return view('dash.gun-register',compact('categories'));
     }
 
     public function Add(Request $request)
@@ -20,13 +23,16 @@ class AdminGunController extends Controller
         $item->name = $request->name;
         $item->price = $request->price;
         $item->is_stock = $request->is_stock;
-        $item->category_id  = 100;
+        $item->category_id  = $request->category_id;
         $item->note = $request->note;
         $item->save();
 
         $gunDetail = new GunDetail();
         $gunDetail->item_id = $item->id;
-        $gunDetail->image = $request->image;
+        //画像をstorageに保存
+        $file_name = $request->file('image')->getClientOriginalName(); // 元のファイル名を取得
+        $path = $request->file('image')->storeAs('img/'.$item->id, $file_name, 'public'); // 画像を保存
+        $gunDetail->image = $request->file('image')->getClientOriginalName();
         $gunDetail->model = $request->model;
         $gunDetail->country = $request->country;
         $gunDetail->brand = $request->brand;
@@ -35,6 +41,6 @@ class AdminGunController extends Controller
         $gunDetail->diameter = $request->diameter;
         $gunDetail->save();
 
-        return view('dash.gun-register');
+        return redirect()->route('admin.gun.show');
     }
 }

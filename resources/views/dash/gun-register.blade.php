@@ -1,10 +1,23 @@
 <x-app-layout>
     <section class="w-full h-full flex items-center justify-center py-10">
-        <form method="post" action="{{route("admin.gun.add")}}"  class="w-[90%] flex flex-col gap-2">
+        <form enctype="multipart/form-data" method="post" action="{{route("admin.gun.add")}}"  class="w-[90%] flex flex-col gap-2">
             @csrf
             {{--品名--}}
             <x-dash-form-component :flag="true" title="品名">
                 <input type="text" required placeholder="例）ABC銃" name="name" class="rounded-lg">
+            </x-dash-form-component>
+            {{--カテゴリー--}}
+            <x-dash-form-component :flag="true" title="カテゴリー">
+                <select name="category_id" required class="rounded-lg">
+                    @if(is_array($categories) && count($categoies)<1)
+                        <option value="">カテゴリーを登録してください</option>
+                    @else
+                        <option value="">選択してください</option>
+                        @foreach($categories as $category)
+                            <option value="{{$category->id}}">{{$category->name}}</option>
+                        @endforeach
+                    @endif
+                </select>
             </x-dash-form-component>
             {{--在庫--}}
             <x-dash-form-component :flag="true" title="在庫">
