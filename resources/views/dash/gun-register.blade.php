@@ -26,37 +26,37 @@
                     <input type="radio" required name="is_stock" value="0" class="rounded-lg"> 無し（売約済）
                 </div>
             </x-dash-form-component>
+            {{--全長--}}
+            <x-dash-form-component :flag="true" title="全長">
+                <input type="number" step="any" required placeholder="例）125.6" name="full_length" class="rounded-lg">
+            </x-dash-form-component>
+            {{--総重量--}}
+            <x-dash-form-component :flag="true" title="総重量">
+                <input type="number" step="any" required placeholder="例）125.6" name="full_weight" class="rounded-lg">
+            </x-dash-form-component>
+            {{--口径--}}
+            <x-dash-form-component :flag="true" title="口径">
+                <input type="number" step="any" required placeholder="例）40" name="diameter" class="rounded-lg">
+            </x-dash-form-component>
             {{--メーカー--}}
             <x-dash-form-component :flag="false" title="メーカー">
-                <input type="text" required placeholder="例）SIG SAUER" name="brand" class="rounded-lg">
+                <input type="text" placeholder="例）SIG SAUER" name="brand" class="rounded-lg">
             </x-dash-form-component>
             {{--商品モデル--}}
             <x-dash-form-component :flag="false" title="商品モデル">
-                <input type="text" required placeholder="例）R93" name="model" class="rounded-lg">
+                <input type="text" placeholder="例）R93" name="model" class="rounded-lg">
             </x-dash-form-component>
             {{--生産国--}}
             <x-dash-form-component :flag="false" title="生産国">
                 <input type="text" placeholder="例）日本" name="country" class="rounded-lg">
             </x-dash-form-component>
-            {{--全長--}}
-            <x-dash-form-component :flag="false" title="全長">
-                <input type="number" step="any" required placeholder="例）125.6" name="full_length" class="rounded-lg">
-            </x-dash-form-component>
-            {{--総重量--}}
-            <x-dash-form-component :flag="false" title="総重量">
-                <input type="number" step="any" required placeholder="例）125.6" name="full_weight" class="rounded-lg">
-            </x-dash-form-component>
-            {{--口径--}}
-            <x-dash-form-component :flag="false" title="口径">
-                <input type="number" step="any" required placeholder="例）40" name="diameter" class="rounded-lg">
-            </x-dash-form-component>
             {{--料金--}}
             <x-dash-form-component :flag="false" title="料金">
-                <input type="number" required placeholder="例）3000" name="price" class="rounded-lg">
+                <input type="number" placeholder="例）3000" name="price" class="rounded-lg">
             </x-dash-form-component>
             {{--画像--}}
             <x-dash-form-component :flag="false" title="画像">
-                <input type="file" required accept="image/png, image/jpeg, image/jpg" name="image" class="rounded-lg">
+                <input type="file" accept="image/png, image/jpeg, image/jpg" name="image" class="rounded-lg">
             </x-dash-form-component>
             {{--備考欄--}}
             <x-dash-form-component :flag="false" title="備考欄">

@@ -10,7 +10,7 @@
             <x-dash-nav-li-component icon="fa-solid fa-list" title="カテゴリー登録" url="admin.category.show"/>
             <x-dash-nav-li-component icon="fa-solid fa-briefcase" title="カテゴリー編集" url="admin.gun.show"/>
             <x-dash-nav-li-component icon="fa-solid fa-gun" title="銃登録" url="admin.gun.show"/>
-            <x-dash-nav-li-component icon="fa-solid fa-pen-to-square" title="銃編集" url="admin.gun.show"/>
+            <x-dash-nav-li-component icon="fa-solid fa-pen-to-square" title="銃編集" url="admin.gun.edit"/>
             <x-dash-nav-li-component icon="fa-solid fa-circle" title="弾登録" url="admin.gun.show"/>
             <x-dash-nav-li-component icon="fa-solid fa-pen-to-square" title="弾編集" url="admin.gun.show"/>
             <x-dash-nav-li-component icon="fa-solid fa-briefcase" title="その他登録" url="admin.gun.show"/>
