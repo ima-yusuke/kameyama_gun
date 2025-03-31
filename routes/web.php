@@ -27,8 +27,6 @@ Route::middleware('auth')->group(function () {
     //銃削除
     Route::get('/dashboard/gun-delete{id}', [AdminGunController::class, 'Delete'])->name('admin.gun.delete');
 
-
-
     //カテゴリー
     Route::get('/dashboard/category-register', [AdminCategoryController::class, 'Show'])->name('admin.category.show');
     Route::post('/dashboard/category-register', [AdminCategoryController::class, 'Add'])->name('admin.category.add');
