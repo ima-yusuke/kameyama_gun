@@ -18,10 +18,14 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-
-    //銃
+    //銃登録
     Route::get('/dashboard/gun-register', [AdminGunController::class, 'Show'])->name('admin.gun.show');
     Route::post('/dashboard/gun-register', [AdminGunController::class, 'Add'])->name('admin.gun.add');
+    //銃編集
+    Route::get('/dashboard/gun-edit', [AdminGunController::class, 'ShowEdit'])->name('admin.gun.edit');
+    Route::post('/dashboard/gun-edit', [AdminGunController::class, 'Update'])->name('admin.gun.update');
+    //銃削除
+    Route::get('/dashboard/gun-delete{id}', [AdminGunController::class, 'Delete'])->name('admin.gun.delete');
 
     //カテゴリー
     Route::get('/dashboard/category-register', [AdminCategoryController::class, 'Show'])->name('admin.category.show');

@@ -22,7 +22,7 @@
                 <td class="border border-gray-500 px-4 py-2">{{ $data["name"] }}</td>
                 <td class="border border-gray-500 px-4 py-2">{{$data->category["name"]}}</td>
                 <td class="border border-gray-500 px-4 py-2">{{ $data->gunDetail["diameter"] }}</td>
-                <td class="border border-gray-500 px-4 py-2">￥{{ number_format($data['price']) }}</td>
+                <td class="border border-gray-500 px-4 py-2">{{ $data['price']==null?"未設定": "￥" .number_format($data['price'])}}</td>
                 <td class="border border-gray-500 px-4 py-2 {{$data['is_stock'] === 1 ? '':'text-red-500'}}">
                     {{ $data["is_stock"]===1?"在庫有":"売約済"}}
                 </td>
@@ -52,7 +52,8 @@
             <!-- Modal body -->
             <div class="p-4 md:p-5 space-y-4">
                 {{--画像--}}
-                <div>
+                <div id="image_container">
+                    <p id="image_not_exist" class="hidden">画像が登録されていません</p>
                     <img data-base-url="{{ asset('storage/img/') }}" id="modal_image" src="{{asset("storage/img/logo_1.jpg")}}" alt="gun" class="object-cover">
                 </div>
                 <aside class="flex flex-wrap gap-4 w-full">
@@ -113,7 +114,7 @@
     });
 
     // trをクリック時に発火
-    function OpenModal(e){
+    function OpenModal(e) {
         // モダルを開く
         modal.classList.remove('hidden');  // モーダルを表示
         modal.setAttribute('aria-hidden', 'false');
@@ -126,24 +127,46 @@
 
         // 品名とモデル
         const modalTitle = document.getElementById('modal_title');
-        modalTitle.textContent = `品名：${data.name} / モデル：${gunDetail.model}`;
+        if (gunDetail.model == null) {
+            modalTitle.textContent = `品名：${data.name} / モデル：未設定`;
+        } else {
+            modalTitle.textContent = `品名：${data.name} / モデル：${gunDetail.model}`;
+        }
         //画像
         const modalImage = document.getElementById('modal_image');
         const baseUrl = modalImage.getAttribute("data-base-url");//asset関数後のベースURL
-        console.log(`${baseUrl}/${gunDetail.id}/${gunDetail.image}`)
-        modalImage.src = `${baseUrl}/${gunDetail.id}/${gunDetail.image}`;
+        if (gunDetail.image == null) {
+            modalImage.classList.add('hidden');
+            document.getElementById('image_not_exist').classList.remove('hidden');
+        } else {
+            document.getElementById('image_not_exist').classList.add('hidden');
+            modalImage.classList.remove('hidden');
+            modalImage.src = `${baseUrl}/${gunDetail.id}/${gunDetail.image}`;
+        }
         // カテゴリー
         const modalCategory = document.getElementById('modal_category');
         modalCategory.textContent = category.name;
         // 生産国
         const modalCountry = document.getElementById('modal_country');
-        modalCountry.textContent = gunDetail.country;
+        if(gunDetail.country == null){
+            modalCountry.textContent = '未設定';
+        } else {
+            modalCountry.textContent = gunDetail.country;
+        }
         // 料金
         const modalPrice = document.getElementById('modal_price');
-        modalPrice.textContent = `￥${data.price.toLocaleString()}`;
+        if (data.price == null) {
+            modalPrice.textContent = '未設定';
+        } else{
+            modalPrice.textContent = `￥${data.price.toLocaleString()}`;
+        }
         // ブランド
         const modalBrand = document.getElementById('modal_brand');
-        modalBrand.textContent = gunDetail.brand;
+        if(gunDetail.brand == null){
+            modalBrand.textContent = '未設定';
+        } else {
+            modalBrand.textContent = gunDetail.brand;
+        }
         // 全長
         const modalFullLength = document.getElementById('modal_full_length');
         modalFullLength.textContent = gunDetail.full_length;
