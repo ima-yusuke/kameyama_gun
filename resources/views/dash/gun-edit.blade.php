@@ -101,11 +101,11 @@
                         </x-dash-form-component>
                         {{--メーカー--}}
                         <x-dash-form-component :flag="false" title="メーカー">
-                            <input type="text" id="gun_modal_brand" required placeholder="例）SIG SAUER" name="brand" class="rounded-lg">
+                            <input type="text" id="gun_modal_brand" placeholder="例）SIG SAUER" name="brand" class="rounded-lg">
                         </x-dash-form-component>
                         {{--商品モデル--}}
                         <x-dash-form-component :flag="false" title="商品モデル">
-                            <input type="text" id="gun_modal_model" required placeholder="例）R93" name="model" class="rounded-lg">
+                            <input type="text" id="gun_modal_model" placeholder="例）R93" name="model" class="rounded-lg">
                         </x-dash-form-component>
                         {{--生産国--}}
                         <x-dash-form-component :flag="false" title="生産国">
@@ -113,7 +113,7 @@
                         </x-dash-form-component>
                         {{--料金--}}
                         <x-dash-form-component :flag="false" title="料金">
-                            <input type="number" id="gun_modal_price" required placeholder="例）3000" name="price" class="rounded-lg">
+                            <input type="number" id="gun_modal_price"  placeholder="例）3000" name="price" class="rounded-lg">
                         </x-dash-form-component>
                         {{--画像--}}
                         <x-dash-form-component :flag="false" title="画像">
