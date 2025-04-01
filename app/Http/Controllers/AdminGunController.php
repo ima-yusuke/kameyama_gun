@@ -13,7 +13,10 @@ class AdminGunController extends Controller
     //銃登録画面表示
     public function Show()
     {
-        $categories = Category::all();
+        //roleが0のItem（銃）を取得
+        $categories = Category::where('role', 0)
+            ->with('children')// 子カテゴリーを取得
+            ->get();
         return view('dash.gun-register',compact('categories'));
     }
 
@@ -21,7 +24,6 @@ class AdminGunController extends Controller
     public function Add(Request $request)
     {
         $item = new Item();
-        $item->role = 0;
         $item->name = $request->name;
         $item->price = $request->price;
         $item->is_stock = $request->is_stock;
@@ -53,16 +55,19 @@ class AdminGunController extends Controller
     //銃編集画面表示
     public function ShowEdit()
     {
-        $dataArray = Item::with('category.children')->get();
-        $categories = Category::all();
-        return view('dash.gun-edit',compact('dataArray','categories'));
+        //roleが0のItem（銃）を取得
+        $categories = Category::where('role', 0)
+            ->with('children')// 子カテゴリーを取得
+            ->get();
+
+        $items = Item::all();
+        return view('dash.gun-edit',compact('categories','items'));
     }
 
     //銃編集
     public function Update(Request $request)
     {
         $item = Item::find($request->id);
-        $item->role = 0;
         $item->name = $request->name;
         $item->price = $request->price;
         $item->is_stock = $request->is_stock;

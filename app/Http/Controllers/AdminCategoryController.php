@@ -10,7 +10,7 @@ class AdminCategoryController extends Controller
     //カテゴリー登録画面表示
     public function Show()
     {
-        $categories = Category::all();
+        $categories = Category::orderBy('role')->get();
         return view('dash.category-register',compact('categories'));
     }
 
@@ -18,7 +18,12 @@ class AdminCategoryController extends Controller
     public function Add(Request $request)
     {
         $category = new Category();
+
+        //分類
+        $category->role = $request->role;
+        //カテゴリー名
         $category->name = $request->name;
+        //parent_id
         if($request->parent_id == 0) {
             $category->parent_id = null;
         }else{
@@ -31,7 +36,7 @@ class AdminCategoryController extends Controller
     //カテゴリー編集画面表示
     public function ShowEdit()
     {
-        $categories = Category::all();
+        $categories = Category::orderBy('role')->get();
         return view('dash.category-edit',compact('categories'));
     }
 
@@ -43,6 +48,7 @@ class AdminCategoryController extends Controller
         //カテゴリー名
         $category->name = $request->name;
 
+        //parent_id
         if($request->parent_id == 0) {
             //ルートカテゴリー
             $category->parent_id = null;

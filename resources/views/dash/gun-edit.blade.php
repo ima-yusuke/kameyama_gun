@@ -15,26 +15,25 @@
             </tr>
             </thead>
             <tbody>
-            @foreach ($dataArray as $data)
-                {{--銃でない（roleが0でない）場合はスキップ--}}
-                @if($data["role"]!==0)
-                    @continue
+            @foreach ($items as $item)
+                @if($item->category["role"]!=0)
+                    @continue;
                 @endif
                 <tr>
-                    <td class="border border-gray-500 px-4 py-2">{{ $data["id"] }}</td>
-                    <td class="border border-gray-500 px-4 py-2">{{ $data["name"] }}</td>
-                    <td class="border border-gray-500 px-4 py-2">{{$data->category["name"]}}</td>
-                    <td class="border border-gray-500 px-4 py-2">{{ $data->gunDetail["diameter"] }}</td>
-                    <td class="border border-gray-500 px-4 py-2">{{ $data['price']==null?"未設定": "￥" .number_format($data['price'])}}</td>
-                    <td class="border border-gray-500 px-4 py-2 {{$data['is_stock'] === 1 ? '':'text-red-500'}}">
-                        {{ $data["is_stock"]===1?"在庫有":"売約済"}}
+                    <td class="border border-gray-500 px-4 py-2">{{ $item["id"] }}</td>
+                    <td class="border border-gray-500 px-4 py-2">{{ $item["name"] }}</td>
+                    <td class="border border-gray-500 px-4 py-2">{{$item->category["name"]}}</td>
+                    <td class="border border-gray-500 px-4 py-2">{{ $item->gunDetail["diameter"] }}</td>
+                    <td class="border border-gray-500 px-4 py-2">{{ $item['price']==null?"未設定": "￥" .number_format($item['price'])}}</td>
+                    <td class="border border-gray-500 px-4 py-2 {{$item['is_stock'] === 1 ? '':'text-red-500'}}">
+                        {{ $item["is_stock"]===1?"在庫有":"売約済"}}
                     </td>
-                    <td class="border border-gray-500 px-4 py-2">{{ $data["note"] }}</td>
+                    <td class="border border-gray-500 px-4 py-2">{{ $item["note"] }}</td>
                     <td class="border border-gray-500 px-4 py-2">
-                        <button data-gun="{{json_encode($data)}}" data-gun-detail="{{json_encode($data->gunDetail)}}" data-category="{{json_encode($data->category)}}" onclick="OpenGunEditModal(event)" class="bg-blue-500 text-white px-4 py-1 rounded-lg">編集</button>
+                        <button data-gun="{{json_encode($item)}}" data-gun-detail="{{json_encode($item->gunDetail)}}" data-category="{{json_encode($item->category)}}" onclick="OpenGunEditModal(event)" class="bg-blue-500 text-white px-4 py-1 rounded-lg">編集</button>
                     </td>
                     <td class="border border-gray-500 px-4 py-2">
-                        <a onclick="return confirm('本当に削除しますか？');" href="{{ route('admin.gun.delete', $data['id']) }}" class="bg-red-500 text-white px-4 py-1 rounded-lg">削除</a>
+                        <a onclick="return confirm('本当に削除しますか？');" href="{{ route('admin.gun.delete', $item['id']) }}" class="bg-red-500 text-white px-4 py-1 rounded-lg">削除</a>
                     </td>
                 </tr>
             @endforeach
@@ -228,7 +227,7 @@
             } else {
                 document.getElementById('gun_image_not_exist').classList.add('hidden');
                 modalImage.classList.remove('hidden');
-                modalImage.src = `${baseUrl}/${gunDetail.id}/${gunDetail.image}`;
+                modalImage.src = `${baseUrl}/${data.id}/${gunDetail.image}`;
             }
             // 備考欄
             const modalNote = document.getElementById('gun_modal_note');

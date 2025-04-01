@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MainController;
 use App\Http\Controllers\AdminGunController;
 use App\Http\Controllers\AdminCategoryController;
+use App\Http\Controllers\AdminBulletController;
 
 //トップページ表示
 Route::get('/', [MainController::class, 'show'])->name('show');
@@ -18,23 +19,38 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    //銃登録
+    //カテゴリー登録view表示
+    Route::get('/dashboard/category-register', [AdminCategoryController::class, 'Show'])->name('admin.category.show');
+    //カテゴリー登録
+    Route::post('/dashboard/category-register', [AdminCategoryController::class, 'Add'])->name('admin.category.add');
+    //カテゴリー編集view表示
+    Route::get('/dashboard/category-edit', [AdminCategoryController::class, 'ShowEdit'])->name('admin.category.edit');
+    //カテゴリー編集
+    Route::post('/dashboard/category-edit', [AdminCategoryController::class, 'Update'])->name('admin.category.update');
+    //カテゴリー削除
+    Route::get('/dashboard/category-delete{id}', [AdminCategoryController::class, 'Delete'])->name('admin.category.delete');
+
+    //銃登録view表示
     Route::get('/dashboard/gun-register', [AdminGunController::class, 'Show'])->name('admin.gun.show');
+    //銃登録
     Route::post('/dashboard/gun-register', [AdminGunController::class, 'Add'])->name('admin.gun.add');
-    //銃編集
+    //銃編集view表示
     Route::get('/dashboard/gun-edit', [AdminGunController::class, 'ShowEdit'])->name('admin.gun.edit');
+    //銃編集
     Route::post('/dashboard/gun-edit', [AdminGunController::class, 'Update'])->name('admin.gun.update');
     //銃削除
     Route::get('/dashboard/gun-delete{id}', [AdminGunController::class, 'Delete'])->name('admin.gun.delete');
 
-    //カテゴリー
-    Route::get('/dashboard/category-register', [AdminCategoryController::class, 'Show'])->name('admin.category.show');
-    Route::post('/dashboard/category-register', [AdminCategoryController::class, 'Add'])->name('admin.category.add');
-    //カテゴリー編集
-    Route::get('/dashboard/category-edit', [AdminCategoryController::class, 'ShowEdit'])->name('admin.category.edit');
-    Route::post('/dashboard/category-edit', [AdminCategoryController::class, 'Update'])->name('admin.category.update');
-    Route::get('/dashboard/category-delete{id}', [AdminCategoryController::class, 'Delete'])->name('admin.category.delete');
-
+    //弾登録view表示
+    Route::get('/dashboard/bullet-register', [AdminBulletController::class, 'Show'])->name('admin.bullet.show');
+    //弾登録
+    Route::post('/dashboard/bullet-register', [AdminBulletController::class, 'Add'])->name('admin.bullet.add');
+    //弾編集view表示
+    Route::get('/dashboard/bullet-edit', [AdminBulletController::class, 'ShowEdit'])->name('admin.bullet.edit');
+    //弾編集
+    Route::post('/dashboard/bullet-edit', [AdminBulletController::class, 'Update'])->name('admin.bullet.update');
+    //弾削除
+    Route::get('/dashboard/bullet-delete{id}', [AdminBulletController::class, 'Delete'])->name('admin.bullet.delete');
 
 });
 
