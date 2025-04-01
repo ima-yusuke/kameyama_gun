@@ -57,6 +57,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard/other-register', [AdminOtherController::class, 'Show'])->name('admin.other.show');
     //その他登録
     Route::post('/dashboard/other-register', [AdminOtherController::class, 'Add'])->name('admin.other.add');
+    //その他編集view表示
+    Route::get('/dashboard/other-edit', [AdminOtherController::class, 'ShowEdit'])->name('admin.other.edit');
+    //その他編集
+    Route::post('/dashboard/other-edit', [AdminOtherController::class, 'Update'])->name('admin.other.update');
+    //その他削除
+    Route::get('/dashboard/other-delete{id}', [AdminOtherController::class, 'Delete'])->name('admin.other.delete');
 
 });
 
