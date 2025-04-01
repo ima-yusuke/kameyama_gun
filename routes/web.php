@@ -6,6 +6,7 @@ use App\Http\Controllers\MainController;
 use App\Http\Controllers\AdminGunController;
 use App\Http\Controllers\AdminCategoryController;
 use App\Http\Controllers\AdminBulletController;
+use App\Http\Controllers\AdminOtherController;
 
 //トップページ表示
 Route::get('/', [MainController::class, 'show'])->name('show');
@@ -51,6 +52,11 @@ Route::middleware('auth')->group(function () {
     Route::post('/dashboard/bullet-edit', [AdminBulletController::class, 'Update'])->name('admin.bullet.update');
     //弾削除
     Route::get('/dashboard/bullet-delete{id}', [AdminBulletController::class, 'Delete'])->name('admin.bullet.delete');
+
+    //その他登録view表示
+    Route::get('/dashboard/other-register', [AdminOtherController::class, 'Show'])->name('admin.other.show');
+    //その他登録
+    Route::post('/dashboard/other-register', [AdminOtherController::class, 'Add'])->name('admin.other.add');
 
 });
 
