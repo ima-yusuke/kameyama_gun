@@ -4,6 +4,7 @@
             <thead>
                 <tr>
                     <th class="border border-gray-500 px-4py-2">/</th>
+                    <th class="border border-gray-500 px-4 py-2">分類</th>
                     <th class="border border-gray-500 px-4 py-2">カテゴリー</th>
                     <th class="border border-gray-500 px-4 py-2">親カテゴリー</th>
                     <th class="border border-gray-500 px-4 py-2">編集</th>
@@ -14,6 +15,16 @@
                 @foreach($categories as $category)
                     <tr>
                         <td class="border border-gray-500 px-4 py-2">{{$category->id}}</td>
+                        <td class="border border-gray-500 px-4 py-2">
+                            @if($category->role == 0)
+                                銃
+                            @elseif($category->role == 1)
+                                弾
+                            @elseif($category->role == 2)
+                                その他
+                            @endif
+                        </td>
+                        {{--CategoryのModelファイルで未設定の場合の対応も記述式--}}
                         <td class="border border-gray-500 px-4 py-2">{{$category->name}}</td>
                         {{--CategoryのModelファイルで未設定の場合の対応も記述式--}}
                         <td class="border border-gray-500 px-4 py-2">{{$category->parent["name"]}}</td>
@@ -56,16 +67,7 @@
                         </x-dash-form-component>
                         {{--カテゴリー--}}
                         <x-dash-form-component :flag="true" title="親カテゴリー">
-                            <select name="parent_id" required class="rounded-lg">
-                                @if(is_array($categories) && count($categoies)<1)
-                                    <option value="">カテゴリーを登録してください</option>
-                                @else
-                                    <option value="">選択してください</option>
-                                    <option value="0">なし</option>
-                                    @foreach($categories as $category)
-                                        <option value="{{$category->id}}">{{$category->name}}</option>
-                                    @endforeach
-                                @endif
+                            <select id="parent_select" name="parent_id" required class="rounded-lg">
                             </select>
                         </x-dash-form-component>
                         <input type="hidden" name="id" id="category_modal_id">
@@ -96,9 +98,6 @@
             categoryModal.setAttribute('aria-hidden', 'false');
             categoryModalBackdrop.classList.remove('hidden');  // バックドロップを表示
 
-            // カテゴリー名
-
-
             // 親カテゴリーのselect要素に現在のカテゴリーの親カテゴリーを選択
             let category = JSON.parse(e.currentTarget.getAttribute("data-category"));
             const categorySelect = document.querySelector('select[name="parent_id"]'); // select要素を取得
@@ -125,6 +124,26 @@
             // inputのvalueにidをセット
             let categoryIdInput = document.getElementById('category_modal_id');
             categoryIdInput.value = category.id;
+
+            // 分類selectを選んだら発火
+            let selectedRoleValue = category.role;
+            let parentSelect = document.getElementById('parent_select');
+
+            // カテゴリーリストを取得
+            let categories = {!! json_encode($categories) !!};
+
+            // すべてのoptionを一旦クリア
+            parentSelect.innerHTML = '<option value="">選択してください</option><option value="0">ルートカテゴリー</option>';
+
+            // 選択されたroleに合致するカテゴリを追加
+            categories.forEach(category => {
+                if (category.role == selectedRoleValue && category.id != categoryIdInput.value) {
+                    let option = document.createElement('option');
+                    option.value = category.id;
+                    option.textContent = category.name;
+                    parentSelect.appendChild(option);
+                }
+            });
         }
     </script>
 </x-app-layout>

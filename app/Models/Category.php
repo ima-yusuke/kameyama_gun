@@ -8,7 +8,8 @@ class Category extends Model
 {
     public $fillable=[
         'name',
-        'parent_id'
+        'parent_id',
+        'role'
     ];
 
     //現在のカテゴリの子カテゴリを再帰的に取得

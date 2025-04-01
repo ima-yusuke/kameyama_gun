@@ -13,7 +13,13 @@ class AdminGunController extends Controller
     //銃登録画面表示
     public function Show()
     {
-        $categories = Category::all();
+        //roleが0のItem（銃）を取得し、それらのカテゴリーを取得（重複を削除）し、"未設定"を除外
+        $categories = Item::where('role', 0)
+            ->with('category')
+            ->get()
+            ->unique('category_id') // category_id の重複を削除
+            ->pluck('category') // category のみ取得
+            ->filter(fn($category) => $category->name !== '未設定');// "未設定" を除外
         return view('dash.gun-register',compact('categories'));
     }
 
@@ -54,7 +60,15 @@ class AdminGunController extends Controller
     public function ShowEdit()
     {
         $dataArray = Item::with('category.children')->get();
-        $categories = Category::all();
+
+        //roleが0のItem（銃）を取得し、それらのカテゴリーを取得（重複を削除）し、"未設定"を除外
+        $categories = Item::where('role', 0)
+            ->with('category')
+            ->get()
+            ->unique('category_id') // category_id の重複を削除
+            ->pluck('category') // category のみ取得
+            ->filter(fn($category) => $category->name !== '未設定');// "未設定" を除外
+
         return view('dash.gun-edit',compact('dataArray','categories'));
     }
 
