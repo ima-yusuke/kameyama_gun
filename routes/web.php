@@ -30,6 +30,11 @@ Route::middleware('auth')->group(function () {
     //カテゴリー
     Route::get('/dashboard/category-register', [AdminCategoryController::class, 'Show'])->name('admin.category.show');
     Route::post('/dashboard/category-register', [AdminCategoryController::class, 'Add'])->name('admin.category.add');
+    //カテゴリー編集
+    Route::get('/dashboard/category-edit', [AdminCategoryController::class, 'ShowEdit'])->name('admin.category.edit');
+    Route::post('/dashboard/category-edit', [AdminCategoryController::class, 'Update'])->name('admin.category.update');
+    Route::get('/dashboard/category-delete{id}', [AdminCategoryController::class, 'Delete'])->name('admin.category.delete');
+
 
 });
 

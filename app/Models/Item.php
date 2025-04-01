@@ -17,7 +17,9 @@ class Item extends Model
 
     public function category()
     {
-        return $this->belongsTo('App\Models\Category');
+        return $this->belongsTo('App\Models\Category')->withDefault([
+            'name' => '未設定'
+        ]);
     }
 
     public function gunDetail()

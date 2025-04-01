@@ -1,6 +1,6 @@
 <x-app-layout>
     <section class="w-full h-full flex items-center justify-center py-10">
-        <table >
+        <table>
             <thead>
             <tr>
                 <th class="border border-gray-500 px-4 py-2">/</th>
@@ -34,7 +34,7 @@
                         <button data-gun="{{json_encode($data)}}" data-gun-detail="{{json_encode($data->gunDetail)}}" data-category="{{json_encode($data->category)}}" onclick="OpenGunEditModal(event)" class="bg-blue-500 text-white px-4 py-1 rounded-lg">編集</button>
                     </td>
                     <td class="border border-gray-500 px-4 py-2">
-                        <a  onclick="return confirm('本当に削除しますか？');" href="{{ route('admin.gun.delete', $data['id']) }}" class="bg-red-500 text-white px-4 py-1 rounded-lg">削除</a>
+                        <a onclick="return confirm('本当に削除しますか？');" href="{{ route('admin.gun.delete', $data['id']) }}" class="bg-red-500 text-white px-4 py-1 rounded-lg">削除</a>
                     </td>
                 </tr>
             @endforeach

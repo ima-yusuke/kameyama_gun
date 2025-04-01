@@ -16,4 +16,12 @@ class Category extends Model
     {
         return $this->hasMany(Category::class, 'parent_id')->with('children');
     }
+
+    //現在のカテゴリの親カテゴリを取得
+    public function parent()
+    {
+        return $this->belongsTo(Category::class, 'parent_id')->withDefault([
+            'name' => 'なし'
+        ]);
+    }
 }
