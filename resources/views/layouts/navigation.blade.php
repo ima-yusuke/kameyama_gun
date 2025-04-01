@@ -52,7 +52,7 @@
                     <div id="bullet" class="z-10 hidden font-normal bg-white w-44">
                         <ul class="flex flex-col gap-4 py-2 text-sm text-gray-700">
                             <x-dash-nav-li-component icon="fa-solid fa-circle" title="弾登録" url="admin.bullet.show"/>
-                            <x-dash-nav-li-component icon="fa-solid fa-pen-to-square" title="弾編集" url="admin.gun.show"/>
+                            <x-dash-nav-li-component icon="fa-solid fa-pen-to-square" title="弾編集" url="admin.bullet.edit"/>
                         </ul>
                     </div>
                 </li>

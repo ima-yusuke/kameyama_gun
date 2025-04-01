@@ -16,6 +16,9 @@
             </thead>
             <tbody>
             @foreach ($items as $item)
+                @if($item->category["role"]!=0)
+                    @continue;
+                @endif
                 <tr>
                     <td class="border border-gray-500 px-4 py-2">{{ $item["id"] }}</td>
                     <td class="border border-gray-500 px-4 py-2">{{ $item["name"] }}</td>

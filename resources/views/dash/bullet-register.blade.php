@@ -1,6 +1,6 @@
 <x-app-layout>
     <section class="w-full h-full flex items-center justify-center py-10">
-        <form enctype="multipart/form-data" method="post" action="{{route("admin.gun.add")}}"  class="w-[90%] flex flex-col gap-2">
+        <form enctype="multipart/form-data" method="post" action="{{route("admin.bullet.add")}}"  class="w-[90%] flex flex-col gap-2">
             @csrf
             {{--品名--}}
             <x-dash-form-component :flag="true" title="弾名">
@@ -13,8 +13,18 @@
                         <option value="">カテゴリーを登録してください</option>
                     @else
                         <option value="">選択してください</option>
+                        @foreach($categories as $category)
+                            <option value="{{$category->id}}">{{$category->name}}</option>
+                        @endforeach
                     @endif
                 </select>
+            </x-dash-form-component>
+            {{--在庫--}}
+            <x-dash-form-component :flag="true" title="在庫">
+                <div class="flex items-center gap-4">
+                    <input type="radio" required name="is_stock" value="1" class="rounded-lg"> 有り
+                    <input type="radio" required name="is_stock" value="0" class="rounded-lg"> 無し（売約済）
+                </div>
             </x-dash-form-component>
             {{--料金--}}
             <x-dash-form-component :flag="false" title="料金">
@@ -30,8 +40,4 @@
             </div>
         </form>
     </section>
-    <script>
-        window.laravel = @json($categories);
-        console.log(window.laravel);
-    </script>
 </x-app-layout>

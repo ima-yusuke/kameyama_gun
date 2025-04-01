@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Models\Item;
 
@@ -9,14 +10,51 @@ class AdminBulletController extends Controller
 {
     public function Show()
     {
-        //roleが1のItem（弾）を取得し、それらのカテゴリーを取得（重複を削除）し、"未設定"を除外
-        $categories = Item::where('role', 1)
-            ->with('category')
-            ->get()
-            ->unique('category_id') // category_id の重複を削除
-            ->pluck('category') // category のみ取得
-            ->filter(fn($category) => $category->name !== '未設定');// "未設定" を除外
+        //roleが1のItem（弾）を取得
+        $categories = Category::where('role', 1)
+            ->with('children')// 子カテゴリーを取得
+            ->get();
 
         return view('dash.bullet-register', compact('categories'));
+    }
+
+    public function Add(Request $request)
+    {
+        $item = new Item();
+        $item->name = $request->name;
+        $item->price = $request->price;
+        $item->is_stock = $request->is_stock;
+        $item->category_id = $request->category_id;
+        $item->note = $request->note;
+        $item->save();
+
+        return redirect()->route('admin.bullet.show');
+    }
+
+    //弾編集view表示
+    public function ShowEdit()
+    {
+        //roleが1のItem（弾）を取得
+        $categories = Category::where('role', 1)
+            ->with('children')// 子カテゴリーを取得
+            ->get();
+
+        $items = Item::all();
+
+        return view('dash.bullet-edit',compact('categories','items'));
+    }
+
+    //弾編集
+    public function Update(Request $request)
+    {
+        $item = Item::find($request->id);
+        $item->name = $request->name;
+        $item->price = $request->price;
+        $item->is_stock = $request->is_stock;
+        $item->category_id = $request->category_id;
+        $item->note = $request->note;
+        $item->save();
+
+        return redirect()->route('admin.bullet.edit');
     }
 }

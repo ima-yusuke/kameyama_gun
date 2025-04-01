@@ -43,6 +43,13 @@ Route::middleware('auth')->group(function () {
 
     //弾登録view表示
     Route::get('/dashboard/bullet-register', [AdminBulletController::class, 'Show'])->name('admin.bullet.show');
+    //弾登録
+    Route::post('/dashboard/bullet-register', [AdminBulletController::class, 'Add'])->name('admin.bullet.add');
+    //弾編集view表示
+    Route::get('/dashboard/bullet-edit', [AdminBulletController::class, 'ShowEdit'])->name('admin.bullet.edit');
+    //弾編集
+    Route::post('/dashboard/bullet-edit', [AdminBulletController::class, 'Update'])->name('admin.bullet.update');
+
 });
 
 require __DIR__.'/auth.php';

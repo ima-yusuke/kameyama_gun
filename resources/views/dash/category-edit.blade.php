@@ -32,7 +32,7 @@
                             <button data-category="{{json_encode($category)}}" onclick="OpenCategoryEditModal(event)" class="bg-blue-500 text-white px-4 py-1 rounded-lg">編集</button>
                         </td>
                         <td class="border border-gray-500 px-4 py-2">
-                            <a onclick="return confirm('本当に削除しますか？');" href="{{ route('admin.category.delete', $category['id']) }}" class="bg-red-500 text-white px-4 py-1 rounded-lg">削除</a>
+                            <a onclick="return confirm('本当に削除しますか？このカテゴリーを持つ商品も全て削除されます。');" href="{{ route('admin.category.delete', $category['id']) }}" class="bg-red-500 text-white px-4 py-1 rounded-lg">削除</a>
                         </td>
                     </tr>
                 @endforeach
