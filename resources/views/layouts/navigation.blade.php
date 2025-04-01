@@ -24,7 +24,7 @@
                     <div id="category" class="z-10 hidden font-normal bg-white w-44">
                         <ul class="flex flex-col gap-4 py-2 text-sm text-gray-700">
                             <x-dash-nav-li-component icon="fa-solid fa-list" title="カテゴリー登録" url="admin.category.show"/>
-                            <x-dash-nav-li-component icon="fa-solid fa-briefcase" title="カテゴリー編集" url="admin.gun.show"/>
+                            <x-dash-nav-li-component icon="fa-solid fa-briefcase" title="カテゴリー編集" url="admin.category.edit"/>
                         </ul>
                     </div>
                 </li>
