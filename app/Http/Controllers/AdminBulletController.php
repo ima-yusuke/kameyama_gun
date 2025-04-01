@@ -57,4 +57,13 @@ class AdminBulletController extends Controller
 
         return redirect()->route('admin.bullet.edit');
     }
+
+    //弾削除
+    public function Delete($id)
+    {
+        $item = Item::find($id);
+        $item->delete();
+
+        return redirect()->route('admin.bullet.edit');
+    }
 }

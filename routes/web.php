@@ -49,6 +49,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard/bullet-edit', [AdminBulletController::class, 'ShowEdit'])->name('admin.bullet.edit');
     //弾編集
     Route::post('/dashboard/bullet-edit', [AdminBulletController::class, 'Update'])->name('admin.bullet.update');
+    //弾削除
+    Route::get('/dashboard/bullet-delete{id}', [AdminBulletController::class, 'Delete'])->name('admin.bullet.delete');
 
 });
 
