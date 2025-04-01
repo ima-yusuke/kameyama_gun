@@ -13,9 +13,6 @@
                         <option value="">カテゴリーを登録してください</option>
                     @else
                         <option value="">選択してください</option>
-{{--                        @foreach($categories as $category)--}}
-{{--                            <option value="{{$category->category["id"]}}">{{$category->category["name"]}}</option>--}}
-{{--                        @endforeach--}}
                     @endif
                 </select>
             </x-dash-form-component>

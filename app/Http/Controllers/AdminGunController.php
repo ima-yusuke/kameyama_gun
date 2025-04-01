@@ -13,13 +13,10 @@ class AdminGunController extends Controller
     //銃登録画面表示
     public function Show()
     {
-        //roleが0のItem（銃）を取得し、それらのカテゴリーを取得（重複を削除）し、"未設定"を除外
-        $categories = Item::where('role', 0)
-            ->with('category')
-            ->get()
-            ->unique('category_id') // category_id の重複を削除
-            ->pluck('category') // category のみ取得
-            ->filter(fn($category) => $category->name !== '未設定');// "未設定" を除外
+        //roleが0のItem（銃）を取得
+        $categories = Category::where('role', 0)
+            ->with('children')// 子カテゴリーを取得
+            ->get();
         return view('dash.gun-register',compact('categories'));
     }
 
@@ -27,7 +24,6 @@ class AdminGunController extends Controller
     public function Add(Request $request)
     {
         $item = new Item();
-        $item->role = 0;
         $item->name = $request->name;
         $item->price = $request->price;
         $item->is_stock = $request->is_stock;
@@ -59,24 +55,19 @@ class AdminGunController extends Controller
     //銃編集画面表示
     public function ShowEdit()
     {
-        $dataArray = Item::with('category.children')->get();
+        //roleが0のItem（銃）を取得
+        $categories = Category::where('role', 0)
+            ->with('children')// 子カテゴリーを取得
+            ->get();
 
-        //roleが0のItem（銃）を取得し、それらのカテゴリーを取得（重複を削除）し、"未設定"を除外
-        $categories = Item::where('role', 0)
-            ->with('category')
-            ->get()
-            ->unique('category_id') // category_id の重複を削除
-            ->pluck('category') // category のみ取得
-            ->filter(fn($category) => $category->name !== '未設定');// "未設定" を除外
-
-        return view('dash.gun-edit',compact('dataArray','categories'));
+        $items = Item::all();
+        return view('dash.gun-edit',compact('categories','items'));
     }
 
     //銃編集
     public function Update(Request $request)
     {
         $item = Item::find($request->id);
-        $item->role = 0;
         $item->name = $request->name;
         $item->price = $request->price;
         $item->is_stock = $request->is_stock;

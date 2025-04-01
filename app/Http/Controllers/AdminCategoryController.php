@@ -10,7 +10,7 @@ class AdminCategoryController extends Controller
     //カテゴリー登録画面表示
     public function Show()
     {
-        $categories = Category::all();
+        $categories = Category::orderBy('role')->get();
         return view('dash.category-register',compact('categories'));
     }
 
@@ -36,7 +36,7 @@ class AdminCategoryController extends Controller
     //カテゴリー編集画面表示
     public function ShowEdit()
     {
-        $categories = Category::all();
+        $categories = Category::orderBy('role')->get();
         return view('dash.category-edit',compact('categories'));
     }
 

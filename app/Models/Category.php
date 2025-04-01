@@ -25,4 +25,10 @@ class Category extends Model
             'name' => 'なし'
         ]);
     }
+
+    // items テーブルとのリレーション
+    public function items()
+    {
+        return $this->hasMany(Item::class, 'category_id');
+    }
 }

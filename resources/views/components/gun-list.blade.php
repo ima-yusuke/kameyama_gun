@@ -14,7 +14,7 @@
     <tbody>
         @foreach ($dataArray as $data)
             {{--銃でない（roleが0でない）場合はスキップ--}}
-            @if($data["role"]!==0)
+            @if($data->category["role"]!==0)
                 @continue
             @endif
             <tr data-gun="{{json_encode($data)}}" data-gun-detail="{{json_encode($data->gunDetail)}}" data-category="{{json_encode($data->category)}}" onclick="OpenModal(event)">
@@ -54,7 +54,7 @@
                 {{--画像--}}
                 <div id="image_container">
                     <p id="image_not_exist" class="hidden">画像が登録されていません</p>
-                    <img data-base-url="{{ asset('storage/img/') }}" id="modal_image" src="{{asset("storage/img/logo_1.jpg")}}" alt="gun" class="object-cover">
+                    <img data-base-url="{{ asset('storage/img/') }}" id="modal_image" src="{{asset("storage/img/logo_1.jpg")}}" alt="gun" class="object-cover w-[100%] h-[300px]">
                 </div>
                 <aside class="flex flex-wrap gap-4 w-full">
                     {{--カテゴリー--}}
@@ -141,7 +141,7 @@
         } else {
             document.getElementById('image_not_exist').classList.add('hidden');
             modalImage.classList.remove('hidden');
-            modalImage.src = `${baseUrl}/${gunDetail.id}/${gunDetail.image}`;
+            modalImage.src = `${baseUrl}/${data.id}/${gunDetail.image}`;
         }
         // カテゴリー
         const modalCategory = document.getElementById('modal_category');
