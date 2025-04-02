@@ -65,8 +65,8 @@
                     <!-- Dropdown menu -->
                     <div id="other" class="z-10 hidden font-normal bg-white w-44">
                         <ul class="flex flex-col gap-4 py-2 text-sm text-gray-700">
-                            <x-dash-nav-li-component icon="fa-solid fa-briefcase" title="その他登録" url="admin.gun.show"/>
-                            <x-dash-nav-li-component icon="fa-solid fa-pen-to-square" title="その他編集" url="admin.gun.show"/>
+                            <x-dash-nav-li-component icon="fa-solid fa-briefcase" title="その他登録" url="admin.other.show"/>
+                            <x-dash-nav-li-component icon="fa-solid fa-pen-to-square" title="その他編集" url="admin.other.edit"/>
                         </ul>
                     </div>
                 </li>
