@@ -4,11 +4,11 @@
 <article class="w-full flex justify-center gap-6 py-8">
     @foreach($categories as $category)
         @if($category["parent_id"]!==null)
-            <button data-id="{{$category['id']}}" data-parent-id="{{$category["parent_id"]}}" class="child-category hidden bg-blue-500 text-white px-4 py-2 rounded-lg" onclick="Filter(event)">
+            <button data-id="{{$category['id']}}" data-parent-id="{{$category["parent_id"]}}" data-category="{{$category}}" data-children="{{$category->children}}" class="child-category hidden bg-blue-500 text-white px-4 py-2 rounded-lg" onclick="Filter(event)">
                 {{$category->name}}
             </button>
         @else
-            <button data-id="{{$category['id']}}" data-parent-id="{{$category["parent_id"]}}" class="parent-category bg-blue-500 text-white px-4 py-2 rounded-lg" onclick="Filter(event)">
+            <button data-id="{{$category['id']}}" data-parent-id="{{$category["parent_id"]}}" data-category="{{$category}}" data-children="{{$category->children}}" class="parent-category bg-blue-500 text-white px-4 py-2 rounded-lg" onclick="Filter(event)">
                 {{$category->name}}
             </button>
         @endif
@@ -205,37 +205,55 @@
     // ルート以外のカテゴリーのボタン
     let childCategoryBtns = document.querySelectorAll(".child-category");
 
-    // フィルターボタン
+    // itemsデータ
     let allData = @json($dataArray);
+    // categoriesデータ
+    let categories = @json($categories);
 
+    // フィルターボタンをクリックした時の処理
     function Filter(event) {
+
+        // クリックしたボタンのカテゴリーid
         let categoryId = event.currentTarget.getAttribute("data-id");
 
         // すべてのテーブル行を一度クリア
         let tableBody = document.querySelector("tbody");
         tableBody.innerHTML = "";
 
-        let filteredData = new Map(); // Mapを使ってオブジェクトの重複を防ぐ
+        //データの重複を防ぐためのMapを使用
+        let filteredData = new Map();
 
         // 選択されたカテゴリーのデータを取得（再帰的に処理）
         function getFilteredData(categoryId, dataList) {
-            dataList.forEach(data => {
-                if (data.category_id == categoryId) {
-                    if (!filteredData.has(data.id)) { // すでに追加されていなければ追加
-                        filteredData.set(data.id, data);
-                    }
 
-                    // 子カテゴリーがある場合、再帰的に処理
-                    if (data.category.children && data.category.children.length > 0) {
-                        data.category.children.forEach(childCategory => {
-                            getFilteredData(childCategory.id, dataList);
+            // クリックされたカテゴリーに紐づくitem
+            let clickedCategory = JSON.parse(event.currentTarget.getAttribute("data-category"));
+            let clickedCategoryItems = clickedCategory.items;
+            // itemsがnullでなく、重複していなければfilteredDataに追加
+            if (clickedCategoryItems != null) {
+                clickedCategoryItems.forEach(item => {
+                    if (!filteredData.has(item.id)) { // すでに追加されていなければ追加
+                        filteredData.set(item.id, item);
+                    }
+                });
+            }
+
+            // クリックされたカテゴリーの子カテゴリーに紐づくitem
+            let clickedCategoryChildren = clickedCategory.children;
+            if(clickedCategoryChildren!=null){
+                clickedCategoryChildren.forEach(childCategory => {
+                    let childCategoryItems = childCategory.items;
+                    if (childCategoryItems != null) {
+                        childCategoryItems.forEach(item => {
+                            if (!filteredData.has(item.id)) { // すでに追加されていなければ追加
+                                filteredData.set(item.id, item);
+                            }
                         });
                     }
-                }
-            });
-        }
+                });
+            }
 
-        // 実行（選択された categoryId からすべての関連データを取得）
+        }
         getFilteredData(categoryId, allData);
 
         // フィルタリング結果をテーブルに追加
@@ -304,6 +322,9 @@
                     appendRow(tableBody, data);
                 });
 
+                // 現在のカテゴリーを非表示
+                hideParent();
+
                 // 1つ前のカテゴリーのボタンを表示
                 showChildren(parentIdArray[parentIdArray.length - 1]);
             }
@@ -365,8 +386,6 @@
         childCategoryBtns.forEach(category => {
             if (category.getAttribute("data-parent-id") === parentId) {
                 category.classList.remove("hidden");
-                // 再帰的にそのカテゴリーの子カテゴリーも表示する
-                showChildren(category.getAttribute("data-id"));
             }
         });
     }
