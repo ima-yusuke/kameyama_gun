@@ -215,13 +215,15 @@
         let tableBody = document.querySelector("tbody");
         tableBody.innerHTML = "";
 
-        let filteredData = [];
+        let filteredData = new Map(); // Mapを使ってオブジェクトの重複を防ぐ
 
         // 選択されたカテゴリーのデータを取得（再帰的に処理）
         function getFilteredData(categoryId, dataList) {
             dataList.forEach(data => {
                 if (data.category_id == categoryId) {
-                    filteredData.push(data);
+                    if (!filteredData.has(data.id)) { // すでに追加されていなければ追加
+                        filteredData.set(data.id, data);
+                    }
 
                     // 子カテゴリーがある場合、再帰的に処理
                     if (data.category.children && data.category.children.length > 0) {
@@ -258,13 +260,15 @@
             let tableBody = document.querySelector("tbody");
             tableBody.innerHTML = "";
 
-            let filteredData = [];
+            let filteredData = new Map(); // Mapを使ってオブジェクトの重複を防ぐ
 
             // 選択されたカテゴリーのデータを取得（再帰的に処理）
             function getFilteredData(categoryId, dataList) {
                 dataList.forEach(data => {
                     if (data.category_id == categoryId) {
-                        filteredData.push(data);
+                        if (!filteredData.has(data.id)) { // すでに追加されていなければ追加
+                            filteredData.set(data.id, data);
+                        }
 
                         // 子カテゴリーがある場合、再帰的に処理
                         if (data.category.children && data.category.children.length > 0) {
@@ -347,7 +351,7 @@
             <td class="border border-gray-500 px-4 py-2 ${data.is_stock === 1 ? '' : 'text-red-500'}">
                 ${data.is_stock === 1 ? "在庫有" : "売約済"}
             </td>
-            <td class="border border-gray-500 px-4 py-2">${data.note}</td>
+            <td class="border border-gray-500 px-4 py-2">${data.note == null ? "" :data.note}</td>
         `;
 
         tableBody.appendChild(row);
