@@ -1,3 +1,23 @@
+<h1 id="current_category" class="w-full"></h1>
+
+{{--フィルターボタン--}}
+<article class="w-full flex justify-center gap-6 py-8">
+    @foreach($categories as $category)
+        @if($category["parent_id"]!==null)
+            <button data-id="{{$category['id']}}" data-parent-id="{{$category["parent_id"]}}" class="child-category hidden bg-blue-500 text-white px-4 py-2 rounded-lg" onclick="Filter(event)">
+                {{$category->name}}
+            </button>
+        @else
+            <button data-id="{{$category['id']}}" data-parent-id="{{$category["parent_id"]}}" class="parent-category bg-blue-500 text-white px-4 py-2 rounded-lg" onclick="Filter(event)">
+                {{$category->name}}
+            </button>
+        @endif
+    @endforeach
+        <button id="back_btn" class="hidden bg-red-500 text-white px-4 py-2 rounded-lg">
+            戻る
+        </button>
+</article>
+
 {{--一覧--}}
 <table>
     <thead>
@@ -176,5 +196,198 @@
         // 口径
         const modalDiameter = document.getElementById('modal_diameter');
         modalDiameter.textContent = gunDetail.diameter;
+    }
+
+    // 戻るボタンをクリックした時の処理のためクリックしたカテゴリーボタンのidを保持する配列
+    let parentIdArray =[];
+    // ルートカテゴリーのボタン
+    let parentCategoryBtns = document.querySelectorAll(".parent-category");
+    // ルート以外のカテゴリーのボタン
+    let childCategoryBtns = document.querySelectorAll(".child-category");
+
+    // フィルターボタン
+    let allData = @json($dataArray);
+
+    function Filter(event) {
+        let categoryId = event.currentTarget.getAttribute("data-id");
+
+        // すべてのテーブル行を一度クリア
+        let tableBody = document.querySelector("tbody");
+        tableBody.innerHTML = "";
+
+        let filteredData = [];
+
+        // 選択されたカテゴリーのデータを取得（再帰的に処理）
+        function getFilteredData(categoryId, dataList) {
+            dataList.forEach(data => {
+                if (data.category_id == categoryId) {
+                    filteredData.push(data);
+
+                    // 子カテゴリーがある場合、再帰的に処理
+                    if (data.category.children && data.category.children.length > 0) {
+                        data.category.children.forEach(childCategory => {
+                            getFilteredData(childCategory.id, dataList);
+                        });
+                    }
+                }
+            });
+        }
+
+        // 実行（選択された categoryId からすべての関連データを取得）
+        getFilteredData(categoryId, allData);
+
+        // フィルタリング結果をテーブルに追加
+        filteredData.forEach(data => {
+            appendRow(tableBody, data);
+        });
+
+        //新しいカテゴリーフィルターを表示
+        ToggleCategorySort(event);
+
+        parentIdArray.push(categoryId);
+
+        // 戻るボタンを表示
+        document.getElementById("back_btn").classList.remove("hidden");
+
+        // 戻るボタンをクリックした時の処理
+        document.getElementById("back_btn").onclick = function() {
+            // 一つ前のカテゴリーのデータを取得
+            parentIdArray.pop();
+
+            // すべてのテーブル行を一度クリア
+            let tableBody = document.querySelector("tbody");
+            tableBody.innerHTML = "";
+
+            let filteredData = [];
+
+            // 選択されたカテゴリーのデータを取得（再帰的に処理）
+            function getFilteredData(categoryId, dataList) {
+                dataList.forEach(data => {
+                    if (data.category_id == categoryId) {
+                        filteredData.push(data);
+
+                        // 子カテゴリーがある場合、再帰的に処理
+                        if (data.category.children && data.category.children.length > 0) {
+                            data.category.children.forEach(childCategory => {
+                                getFilteredData(childCategory.id, dataList);
+                            });
+                        }
+                    }
+                });
+            }
+
+            // テーブルに1つ前のカテゴリーのデータを追加
+            if( parentIdArray.length === 0){
+                allData.forEach(data => {
+                    if(data.category["role"]===0){
+                        appendRow(tableBody, data);
+                    }
+                });
+                parentCategoryBtns.forEach(category => {
+                    category.classList.remove("hidden");
+                });
+
+                childCategoryBtns.forEach(category => {
+                    category.classList.add("hidden");
+                });
+
+                // 戻るボタンを非表示
+                document.getElementById("back_btn").classList.add("hidden");
+            }else{
+                getFilteredData(parentIdArray[parentIdArray.length - 1], allData);
+                // フィルタリング結果をテーブルに追加
+                filteredData.forEach(data => {
+                    appendRow(tableBody, data);
+                });
+
+                // 1つ前のカテゴリーのボタンを表示
+                showChildren(parentIdArray[parentIdArray.length - 1]);
+            }
+
+            let currentCategory = document.getElementById("current_category").innerText;
+
+            if (parentIdArray.length !== 0) {
+                // 最後の " -> " 以降を削除
+                document.getElementById("current_category").innerText = currentCategory.substring(0, currentCategory.lastIndexOf(" -> "));
+            } else {
+                // それ以上戻れない場合は空にする
+                document.getElementById("current_category").innerText = "";
+            }
+
+            return;
+        };
+
+        // 現在の位置を表示するh1要素のテキストを更新
+        if(document.getElementById("current_category").innerText===""){
+
+            document.getElementById("current_category").innerHTML =  event.currentTarget.innerText;
+        }else{
+            document.getElementById("current_category").innerHTML += " -> " + event.currentTarget.innerText;
+        }
+    }
+
+    //データをテーブルに追加
+    function appendRow(tableBody, data) {
+        let row = document.createElement("tr");
+
+        row.setAttribute("data-gun", JSON.stringify(data));
+        row.setAttribute("data-gun-detail", JSON.stringify(data.gun_detail));
+        row.setAttribute("data-category", JSON.stringify(data.category));
+
+        row.onclick = function(event) {
+            OpenModal(event);
+        };
+
+        row.innerHTML = `
+            <td class="border border-gray-500 px-4 py-2">${data.id}</td>
+            <td class="border border-gray-500 px-4 py-2">${data.name}</td>
+            <td class="border border-gray-500 px-4 py-2">${data.category.name}</td>
+            <td class="border border-gray-500 px-4 py-2">${data.gun_detail.diameter}</td>
+            <td class="border border-gray-500 px-4 py-2">${data.price == null ? "未設定" : "￥" + new Intl.NumberFormat().format(data.price)}</td>
+            <td class="border border-gray-500 px-4 py-2 ${data.is_stock === 1 ? '' : 'text-red-500'}">
+                ${data.is_stock === 1 ? "在庫有" : "売約済"}
+            </td>
+            <td class="border border-gray-500 px-4 py-2">${data.note}</td>
+        `;
+
+        tableBody.appendChild(row);
+    }
+
+    // クリックしたボタンのカテゴリーidを保持する変数
+    let clickedCategoryId = null;
+
+    // 子カテゴリーを再帰的に表示する関数
+    function showChildren(parentId) {
+        childCategoryBtns.forEach(category => {
+            if (category.getAttribute("data-parent-id") === parentId) {
+                category.classList.remove("hidden");
+                // 再帰的にそのカテゴリーの子カテゴリーも表示する
+                showChildren(category.getAttribute("data-id"));
+            }
+        });
+    }
+
+    // 親カテゴリーを非表示にする関数
+    function hideParent() {
+
+        parentCategoryBtns.forEach(category => {
+            category.classList.add("hidden");
+        });
+
+        childCategoryBtns.forEach(category => {
+            category.classList.add("hidden");
+        });
+    }
+
+    function ToggleCategorySort(e) {
+
+        // クリックしたボタンのカテゴリーid
+        clickedCategoryId = e.currentTarget.getAttribute("data-id");
+
+        // クリックしたカテゴリーの親を非表示
+        hideParent();
+
+        // クリックしたカテゴリーの子を表示
+        showChildren(clickedCategoryId);
     }
 </script>
