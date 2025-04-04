@@ -1,4 +1,4 @@
-<h1 id="current_category" class="w-full"></h1>
+<h1 id="current_category" class="w-full font-bold text-xl"></h1>
 
 {{--フィルターボタン--}}
 <article class="w-full flex justify-center gap-6 py-8">
@@ -31,7 +31,7 @@
             <th class="border border-gray-500 px-4 py-2">備考欄</th>
         </tr>
     </thead>
-    <tbody>
+    <tbody id="default_tbody">
         @foreach ($dataArray as $data)
             {{--銃でない（roleが0でない）場合はスキップ--}}
             @if($data->category["role"]!==0)
@@ -62,7 +62,7 @@
                 {{--品名--}}
                 <h3 id="modal_title" class="text-xl font-semibold text-gray-900 dark:text-white"></h3>
                 {{--閉じるボタン--}}
-                <button type="button" id="modal-close-btn" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="static-modal">
+                <button onclick="CloseModal()" type="button" id="modal-close-btn" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="static-modal">
                     <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
                     </svg>
@@ -123,27 +123,24 @@
 <div id="modal_backdrop" class="hidden bg-gray-900 bg-opacity-50 dark:bg-opacity-80 fixed inset-0 z-40"></div>
 
 <script>
-    const modal = document.getElementById('static-modal');//モダル要素
-    const closeModalButton = document.getElementById('modal-close-btn');//モーダルクローズボタン
-    const modalBackdrop = document.getElementById('modal_backdrop');//モダルオープン時のグレー背景
-
-    // モーダルを閉じる
-    closeModalButton.addEventListener('click', () => {
-        modal.classList.add('hidden');  // モーダルを非表示
-        modalBackdrop.classList.add('hidden');  // バックドロップを非表示
-    });
-
-    // trをクリック時に発火
+    //モダル要素
+    const modal = document.getElementById('static-modal');
+    //モダルオープン時のグレー背景
+    const modalBackdrop = document.getElementById('modal_backdrop');
+    //モダルを開く（trをクリック時に発火）
     function OpenModal(e) {
-        // モダルを開く
-        modal.classList.remove('hidden');  // モーダルを表示
-        modal.setAttribute('aria-hidden', 'false');
-        modalBackdrop.classList.remove('hidden');  // バックドロップを表示
 
-        // e.currentTargetで<tr>要素を取得
+        // モーダルを表示
+        modal.classList.remove('hidden');
+        // バックドロップを表示
+        modalBackdrop.classList.remove('hidden');
+
+        // e.currentTargetで<tr>要素を取得。
         let data = JSON.parse(e.currentTarget.getAttribute("data-gun"));//itemsテーブル
         let gunDetail = JSON.parse(e.currentTarget.getAttribute("data-gun-detail"));//gun_detailsテーブル
         let category = JSON.parse(e.currentTarget.getAttribute("data-category"));//categoriesテーブル
+
+        // 以下、モダルに表示する内容を設定
 
         // 品名とモデル
         const modalTitle = document.getElementById('modal_title');
@@ -197,162 +194,83 @@
         const modalDiameter = document.getElementById('modal_diameter');
         modalDiameter.textContent = gunDetail.diameter;
     }
+    //モダルを閉じる（ボタンにonclickで指定）
+    function CloseModal(){
+        modal.classList.add('hidden');  // モーダルを非表示
+        modalBackdrop.classList.add('hidden');  // バックドロップを非表示
+    }
 
-    // 戻るボタンをクリックした時の処理のためクリックしたカテゴリーボタンのidを保持する配列
+    //itemsデータ
+    let dataArray = @json($dataArray);
+    //クリックしたカテゴリーボタンのidを保持する配列（戻るボタンの処理用）
     let parentIdArray =[];
-    // ルートカテゴリーのボタン
-    let parentCategoryBtns = document.querySelectorAll(".parent-category");
-    // ルート以外のカテゴリーのボタン
-    let childCategoryBtns = document.querySelectorAll(".child-category");
+    //tbodyに表示するデータを格納するMap
+    let filteredData = new Map();
+    // 1つ前のtbodyデータを保存するMap
+    let previousTbodyData = new Map();
+    //ルートカテゴリーのボタン
+    const parentCategoryBtns = document.querySelectorAll(".parent-category");
+    //ルート以外のカテゴリーのボタン
+    const childCategoryBtns = document.querySelectorAll(".child-category");
 
-    // itemsデータ
-    let allData = @json($dataArray);
-    // categoriesデータ
-    let categories = @json($categories);
-
-    // フィルターボタンをクリックした時の処理
+    //カテゴリーボタンをクリックした時の処理
     function Filter(event) {
 
-        // クリックしたボタンのカテゴリーid
-        let categoryId = event.currentTarget.getAttribute("data-id");
+        //クリックしたボタンのカテゴリーid
+        let clickedCategoryId = event.currentTarget.getAttribute("data-id");
 
-        // すべてのテーブル行を一度クリア
-        let tableBody = document.querySelector("tbody");
-        tableBody.innerHTML = "";
+        //配列に追加（戻るボタンClick時に前回のカテゴリーに戻るため）
+        parentIdArray.push(clickedCategoryId);
 
-        //データの重複を防ぐためのMapを使用
-        let filteredData = new Map();
+        //Mapのリセット
+        filteredData = new Map();
 
-        // 選択されたカテゴリーのデータを取得（再帰的に処理）
-        function getFilteredData(categoryId, dataList) {
+        //クリックされたカテゴリー
+        let clickedCategory = JSON.parse(event.currentTarget.getAttribute("data-category"));
+        //Mapにテーブルで使用するデータを格納
+        SetFilteredData(clickedCategory);
 
-            // クリックされたカテゴリーに紐づくitem
-            let clickedCategory = JSON.parse(event.currentTarget.getAttribute("data-category"));
-            let clickedCategoryItems = clickedCategory.items;
-            // itemsがnullでなく、重複していなければfilteredDataに追加
-            if (clickedCategoryItems != null) {
-                clickedCategoryItems.forEach(item => {
-                    if (!filteredData.has(item.id)) { // すでに追加されていなければ追加
-                        filteredData.set(item.id, item);
-                    }
-                });
-            }
+        //テーブルのデフォルトtbodyを非表示にする
+        document.getElementById("default_tbody").classList.add("hidden");
 
-            // クリックされたカテゴリーの子カテゴリーに紐づくitem
-            let clickedCategoryChildren = clickedCategory.children;
-            if(clickedCategoryChildren!=null){
-                clickedCategoryChildren.forEach(childCategory => {
-                    let childCategoryItems = childCategory.items;
-                    if (childCategoryItems != null) {
-                        childCategoryItems.forEach(item => {
-                            if (!filteredData.has(item.id)) { // すでに追加されていなければ追加
-                                filteredData.set(item.id, item);
-                            }
-                        });
-                    }
-                });
-            }
-
+        //もし既に子カテゴリー用のtbodyが存在する場合は削除
+        if(document.getElementById("new_tbody") !== null){
+            document.getElementById("new_tbody").remove();
         }
-        getFilteredData(categoryId, allData);
 
-        // フィルタリング結果をテーブルに追加
+        //子カテゴリー用の新しいtbodyを作成
+        let newTableBody = document.createElement("tbody");
+        // 後でこのtbodyを取得するためidを付与
+        newTableBody.id = "new_tbody";
+        //newTableBodyに新しいtrを追加
         filteredData.forEach(data => {
-            appendRow(tableBody, data);
+            AppendRow(newTableBody, data);
         });
 
-        //新しいカテゴリーフィルターを表示
-        ToggleCategorySort(event);
+        //全てのカテゴリーを非表示
+        HideAllCategoryBtn();
 
-        parentIdArray.push(categoryId);
+        //クリックしたカテゴリーの子カテゴリーを表示
+        ShowChildrenCategory(clickedCategoryId);
 
-        // 戻るボタンを表示
-        document.getElementById("back_btn").classList.remove("hidden");
-
-        // 戻るボタンをクリックした時の処理
-        document.getElementById("back_btn").onclick = function() {
-            // 一つ前のカテゴリーのデータを取得
-            parentIdArray.pop();
-
-            // すべてのテーブル行を一度クリア
-            let tableBody = document.querySelector("tbody");
-            tableBody.innerHTML = "";
-
-            let filteredData = new Map(); // Mapを使ってオブジェクトの重複を防ぐ
-
-            // 選択されたカテゴリーのデータを取得（再帰的に処理）
-            function getFilteredData(categoryId, dataList) {
-                dataList.forEach(data => {
-                    if (data.category_id == categoryId) {
-                        if (!filteredData.has(data.id)) { // すでに追加されていなければ追加
-                            filteredData.set(data.id, data);
-                        }
-
-                        // 子カテゴリーがある場合、再帰的に処理
-                        if (data.category.children && data.category.children.length > 0) {
-                            data.category.children.forEach(childCategory => {
-                                getFilteredData(childCategory.id, dataList);
-                            });
-                        }
-                    }
-                });
-            }
-
-            // テーブルに1つ前のカテゴリーのデータを追加
-            if( parentIdArray.length === 0){
-                allData.forEach(data => {
-                    if(data.category["role"]===0){
-                        appendRow(tableBody, data);
-                    }
-                });
-                parentCategoryBtns.forEach(category => {
-                    category.classList.remove("hidden");
-                });
-
-                childCategoryBtns.forEach(category => {
-                    category.classList.add("hidden");
-                });
-
-                // 戻るボタンを非表示
-                document.getElementById("back_btn").classList.add("hidden");
-            }else{
-                getFilteredData(parentIdArray[parentIdArray.length - 1], allData);
-                // フィルタリング結果をテーブルに追加
-                filteredData.forEach(data => {
-                    appendRow(tableBody, data);
-                });
-
-                // 現在のカテゴリーを非表示
-                hideParent();
-
-                // 1つ前のカテゴリーのボタンを表示
-                showChildren(parentIdArray[parentIdArray.length - 1]);
-            }
-
-            let currentCategory = document.getElementById("current_category").innerText;
-
-            if (parentIdArray.length !== 0) {
-                // 最後の " -> " 以降を削除
-                document.getElementById("current_category").innerText = currentCategory.substring(0, currentCategory.lastIndexOf(" -> "));
-            } else {
-                // それ以上戻れない場合は空にする
-                document.getElementById("current_category").innerText = "";
-            }
-
-            return;
-        };
-
-        // 現在の位置を表示するh1要素のテキストを更新
+        //現在の位置を表示するh1要素のテキストを更新
         if(document.getElementById("current_category").innerText===""){
-
             document.getElementById("current_category").innerHTML =  event.currentTarget.innerText;
         }else{
             document.getElementById("current_category").innerHTML += " -> " + event.currentTarget.innerText;
         }
+
+        //現在のtbodyデータを保存
+        if(document.getElementById("new_tbody") !== null){
+            previousTbodyData.set(clickedCategoryId,newTableBody)
+        }
+
+        //1つ前のカテゴリーに戻る処理
+        BackToPreviousCategory();
     }
 
     //データをテーブルに追加
-    function appendRow(tableBody, data) {
+    function AppendRow(tableBody, data) {
         let row = document.createElement("tr");
 
         row.setAttribute("data-gun", JSON.stringify(data));
@@ -376,41 +294,134 @@
         `;
 
         tableBody.appendChild(row);
+        document.querySelector("table").appendChild(tableBody);
     }
 
-    // クリックしたボタンのカテゴリーidを保持する変数
-    let clickedCategoryId = null;
-
-    // 子カテゴリーを再帰的に表示する関数
-    function showChildren(parentId) {
+    //子カテゴリーを表示する関数
+    function ShowChildrenCategory(clickedCategoryId) {
         childCategoryBtns.forEach(category => {
-            if (category.getAttribute("data-parent-id") === parentId) {
+            if (category.getAttribute("data-parent-id") === clickedCategoryId) {
                 category.classList.remove("hidden");
             }
         });
     }
 
-    // 親カテゴリーを非表示にする関数
-    function hideParent() {
+    //全カテゴリーを非表示にする関数
+    function HideAllCategoryBtn() {
 
+        //ルートカテゴリーを非表示
         parentCategoryBtns.forEach(category => {
             category.classList.add("hidden");
         });
 
+        //ルートカテゴリー以外を非表示
         childCategoryBtns.forEach(category => {
             category.classList.add("hidden");
         });
     }
 
-    function ToggleCategorySort(e) {
+    //クリックされたカテゴリーとその子カテゴリーが持つitemsデータを取得（再帰的に処理）
+    function SetFilteredData(clickedCategory) {
 
-        // クリックしたボタンのカテゴリーid
-        clickedCategoryId = e.currentTarget.getAttribute("data-id");
+        //クリックされたカテゴリーに紐づくitem
+        let clickedCategoryItems = clickedCategory.items;
+        //itemsがnullでなく、重複していなければfilteredDataに追加
+        if (clickedCategoryItems != null) {
+            clickedCategoryItems.forEach(item => {
+                //すでにMapに追加されていなければ追加
+                if (!filteredData.has(item.id)) {
+                    filteredData.set(item.id, item);
+                }
+            });
+        }
 
-        // クリックしたカテゴリーの親を非表示
-        hideParent();
+        // クリックされたカテゴリーの子カテゴリー
+        let clickedCategoryChildren = clickedCategory.children;
+        //子カテゴリーがある場合、子カテゴリーのitemsをMapに追加
+        if(clickedCategoryChildren!=null){
+            clickedCategoryChildren.forEach(childCategory => {
+                //子カテゴリーに紐づくitemsを取得
+                let childCategoryItems = childCategory.items;
 
-        // クリックしたカテゴリーの子を表示
-        showChildren(clickedCategoryId);
+                // 子カテゴリーに紐づくitemsがnullでなく、重複していなければfilteredDataに追加
+                if (childCategoryItems != null) {
+                    childCategoryItems.forEach(item => {
+                        //すでにMapに追加されていなければ追加
+                        if (!filteredData.has(item.id)) {
+                            filteredData.set(item.id, item);
+                        }
+                    });
+                }
+
+                //childCategoryにさらに子カテゴリーがある場合、再帰的に処理
+                if (childCategory.children && childCategory.children.length > 0) {
+                    SetFilteredData(childCategory);
+                }
+            });
+        }
+    }
+
+    // 戻るボタンをクリックした時の処理
+    function BackToPreviousCategory() {
+
+        // 戻るボタンを表示
+        document.getElementById("back_btn").classList.remove("hidden");
+
+        // 戻るボタンをクリックした時の処理
+        document.getElementById("back_btn").onclick = function() {
+
+            //カテゴリーidを1つ削除
+            parentIdArray.pop();
+
+            // 現在のカテゴリーの位置を示すh1要素
+            let currentCategory = document.getElementById("current_category").innerText;
+
+            // テーブルに1つ前のカテゴリーのデータを追加
+            // ルートカテゴリーに戻る場合と、子カテゴリーに戻る場合でif分岐
+            if( parentIdArray.length === 0){
+
+                // 全てのルートカテゴリーを非表示
+                parentCategoryBtns.forEach(category => {
+                    category.classList.remove("hidden");
+                });
+
+                // 全ての子カテゴリーを非表示
+                childCategoryBtns.forEach(category => {
+                    category.classList.add("hidden");
+                });
+
+                // 現在のカテゴリーの位置を示すh1を空文字に
+                document.getElementById("current_category").innerText = "";
+
+                // 戻るボタンを非表示
+                document.getElementById("back_btn").classList.add("hidden");
+
+                // 現在のtbodyを削除
+                if(document.getElementById("new_tbody") !== null){
+                    document.getElementById("new_tbody").remove();
+                }
+                // デフォルトのtbodyを表示
+                document.getElementById("default_tbody").classList.remove("hidden");
+            }else{
+                // 現在のカテゴリーを非表示
+                HideAllCategoryBtn();
+
+                // 1つ前のカテゴリーのボタンを表示
+                ShowChildrenCategory(parentIdArray[parentIdArray.length - 1]);
+
+                // 最後の " -> " 以降を削除
+                document.getElementById("current_category").innerText = currentCategory.substring(0, currentCategory.lastIndexOf(" -> "));
+
+                // 1つ前のデータをMapから取得
+                let savedTbody  = previousTbodyData.get(parentIdArray[parentIdArray.length - 1]);
+                console.log(savedTbody)
+                // 現在のtbodyを削除
+                if(document.getElementById("new_tbody") !== null){
+                    document.getElementById("new_tbody").remove();
+                }
+                // 新しくMapより取得したtbodyを追加
+                document.querySelector("table").appendChild(savedTbody);
+            }
+        };
     }
 </script>
