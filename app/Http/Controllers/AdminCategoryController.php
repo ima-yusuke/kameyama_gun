@@ -36,7 +36,11 @@ class AdminCategoryController extends Controller
     //カテゴリー編集画面表示
     public function ShowEdit()
     {
-        $categories = Category::orderBy('role')->get();
+        $categories = Category::orderBy('role')
+            ->orderBy('parent_id')
+            ->orderBy('id')
+            ->with('children')
+            ->get();
         return view('dash.category-edit',compact('categories'));
     }
 
