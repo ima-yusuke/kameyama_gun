@@ -57,10 +57,11 @@ class AdminGunController extends Controller
     {
         //roleが0のItem（銃）を取得
         $categories = Category::where('role', 0)
+            ->orderBy('name')
             ->with('children')// 子カテゴリーを取得
             ->get();
 
-        $items = Item::all();
+        $items = Item::orderBy('category_id')->orderBy("id")->get();
         return view('dash.gun-edit',compact('categories','items'));
     }
 

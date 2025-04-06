@@ -39,7 +39,7 @@ class AdminBulletController extends Controller
             ->with('children')// 子カテゴリーを取得
             ->get();
 
-        $items = Item::all();
+        $items = Item::orderBy('category_id')->orderBy("id")->get();
 
         return view('dash.bullet-edit',compact('categories','items'));
     }

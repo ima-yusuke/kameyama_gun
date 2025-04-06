@@ -21,7 +21,7 @@ class MainController extends Controller
         $this->loadItemsRecursively($categories);
 
         // 全ての items を category & gunDetail 付きで取得
-        $dataArray = Item::with(['category.children', 'gunDetail'])->get();
+        $dataArray = Item::with(['category.children', 'gunDetail'])->orderBy("category_id")->orderBy("id")->get();
 
         return view('main', compact('dataArray', 'categories'));
     }
