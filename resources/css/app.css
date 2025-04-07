@@ -1,3 +1,29 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@keyframes slideToLogo {
+    0% {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    10% {
+        opacity: 1;
+    }
+    90% {
+        opacity: 1;
+    }
+    100% {
+        transform: translateX(calc(-100vw + 150px)); /* 画面右端 → ロゴ(150px)の位置 */
+        opacity: 0;
+    }
+}
+
+.animate-slide {
+    position: absolute;
+    top: 70%;
+    right: 0;
+    animation: slideToLogo 8s linear infinite;
+    z-index: 0; /* 背面に回す */
+}
+

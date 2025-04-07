@@ -1,72 +1,75 @@
 <x-app-layout>
-    <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" id="category-tab-list" data-tabs-toggle="#category-tab-content" role="tablist">
-        @for($i = 0; $i < 3; $i++)
-            <li class="me-2" role="presentation">
-                <button class="inline-block p-4 px-10 border-b-2 rounded-t-lg @if($i !== 0) hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 @else text-blue-600 border-blue-600 @endif"
-                        id="category{{$i}}-tab"
-                        data-tabs-target="#category{{$i}}"
-                        type="button"
-                        role="tab"
-                        aria-controls="category{{$i}}"
-                        aria-selected="{{ $i === 0 ? 'true' : 'false' }}">
-                    @if($i==0)
-                        <i class="fa-solid fa-gun pr-2"></i>銃
-                    @elseif($i==1)
-                        <i class="fa-solid fa-circle pr-2"></i>弾
-                    @elseif($i==2)
-                        <i class="fa-solid fa-briefcase pr-2"></i>その他
-                    @endif
-                </button>
-            </li>
-        @endfor
-    </ul>
-
-    <div id="category-tab-content">
-        @for($i = 0; $i < 3; $i++)
-            <div class="@if($i !== 0) hidden @endif p-4 rounded-lg bg-gray-50 dark:bg-gray-800 h-full"
-                 id="category{{$i}}"
-                 role="tabpanel"
-                 aria-labelledby="category{{$i}}-tab">
-                <table>
-                    <thead>
-                    <tr>
-                        <th class="border border-gray-500 px-4 py-2">/</th>
-                        <th class="border border-gray-500 px-4 py-2">分類</th>
-                        <th class="border border-gray-500 px-4 py-2">カテゴリー</th>
-                        <th class="border border-gray-500 px-4 py-2">親カテゴリー</th>
-                        <th class="border border-gray-500 px-4 py-2">編集</th>
-                        <th class="border border-gray-500 px-4 py-2">削除</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    @foreach($categories as $category)
-                        @if($category->role != $i)
-                            @continue
+    <section class="w-full h-full flex flex-col items-center py-10">
+        {{--tabメニュー--}}
+        <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" id="category-tab-list" data-tabs-toggle="#category-tab-content" role="tablist">
+            @for($i = 0; $i < 3; $i++)
+                <li class="me-2" role="presentation">
+                    <button class="inline-block p-4 px-10 border-b-2 rounded-t-lg @if($i !== 0) hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 @else text-blue-600 border-blue-600 @endif"
+                            id="category{{$i}}-tab"
+                            data-tabs-target="#category{{$i}}"
+                            type="button"
+                            role="tab"
+                            aria-controls="category{{$i}}"
+                            aria-selected="{{ $i === 0 ? 'true' : 'false' }}">
+                        @if($i==0)
+                            <i class="fa-solid fa-gun pr-2"></i>銃
+                        @elseif($i==1)
+                            <i class="fa-solid fa-circle pr-2"></i>弾
+                        @elseif($i==2)
+                            <i class="fa-solid fa-briefcase pr-2"></i>その他
                         @endif
-                        <tr>
-                            <td class="border border-gray-500 px-4 py-2">{{$category->id}}</td>
-                            <td class="border border-gray-500 px-4 py-2">
-                                @if($i==0) 銃
-                                @elseif($i==1) 弾
-                                @elseif($i==2) その他
-                                @endif
-                            </td>
-                            <td class="border border-gray-500 px-4 py-2">{{$category->name}}</td>
-                            <td class="border border-gray-500 px-4 py-2">{{$category->parent["name"]}}</td>
-                            <td class="border border-gray-500 px-4 py-2">
-                                <button data-category="{{json_encode($category)}}" onclick="OpenCategoryEditModal(event)" class="bg-blue-500 text-white px-4 py-1 rounded-lg">編集</button>
-                            </td>
-                            <td class="border border-gray-500 px-4 py-2">
-                                <a onclick="return confirm('本当に削除しますか？このカテゴリーを持つ商品も全て削除されます。');" href="{{ route('admin.category.delete', $category['id']) }}" class="bg-red-500 text-white px-4 py-1 rounded-lg">削除</a>
-                            </td>
-                        </tr>
-                    @endforeach
-                    </tbody>
-                </table>
-            </div>
-        @endfor
-    </div>
+                    </button>
+                </li>
+            @endfor
+        </ul>
 
+        {{--tabコンテンツ--}}
+        <div id="category-tab-content">
+            @for($i = 0; $i < 3; $i++)
+                <div class="@if($i !== 0) hidden @endif p-4 rounded-lg bg-gray-50 dark:bg-gray-800 h-full"
+                     id="category{{$i}}"
+                     role="tabpanel"
+                     aria-labelledby="category{{$i}}-tab">
+                    <table>
+                        <thead>
+                        <tr>
+                            <th class="border border-gray-500 px-4 py-2">/</th>
+                            <th class="border border-gray-500 px-4 py-2">分類</th>
+                            <th class="border border-gray-500 px-4 py-2">カテゴリー</th>
+                            <th class="border border-gray-500 px-4 py-2">親カテゴリー</th>
+                            <th class="border border-gray-500 px-4 py-2">編集</th>
+                            <th class="border border-gray-500 px-4 py-2">削除</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @foreach($categories as $category)
+                            @if($category->role != $i)
+                                @continue
+                            @endif
+                            <tr>
+                                <td class="border border-gray-500 px-4 py-2">{{$category->id}}</td>
+                                <td class="border border-gray-500 px-4 py-2">
+                                    @if($i==0) 銃
+                                    @elseif($i==1) 弾
+                                    @elseif($i==2) その他
+                                    @endif
+                                </td>
+                                <td class="border border-gray-500 px-4 py-2">{{$category->name}}</td>
+                                <td class="border border-gray-500 px-4 py-2">{{$category->parent["name"]}}</td>
+                                <td class="border border-gray-500 px-4 py-2">
+                                    <button data-category="{{json_encode($category)}}" onclick="OpenCategoryEditModal(event)" class="bg-blue-500 text-white px-4 py-1 rounded-lg">編集</button>
+                                </td>
+                                <td class="border border-gray-500 px-4 py-2">
+                                    <a onclick="return confirm('本当に削除しますか？このカテゴリーを持つ商品も全て削除されます。');" href="{{ route('admin.category.delete', $category['id']) }}" class="bg-red-500 text-white px-4 py-1 rounded-lg">削除</a>
+                                </td>
+                            </tr>
+                        @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            @endfor
+        </div>
+    </section>
 
     <!--modal -->
     <div id="category_edit_modal" class="hidden fixed top-1/2 transform -translate-y-1/2 inset-0 z-50 flex justify-center items-center w-full h-[70%] overflow-y-scroll">
