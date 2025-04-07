@@ -8,4 +8,17 @@ export default defineConfig({
             refresh: true,
         }),
     ],
+    server: {
+        //ローカル環境では不要
+        // https: true,
+    },
+    build: {
+        manifest: 'manifest.json',
+        rollupOptions: {
+            input: {
+                appCss: 'resources/css/app.css',
+                app: 'resources/js/app.js'
+            }
+        }
+    }
 });

@@ -8,14 +8,9 @@
             </x-dash-form-component>
             {{--カテゴリー--}}
             <x-dash-form-component :flag="true" title="カテゴリー">
-                <select name="category_id" required class="rounded-lg">
+                <select name="category_id" required class="rounded-lg" id="parent_select">
                     @if(is_array($categories) && count($categoies)<1)
                         <option value="">カテゴリーを登録してください</option>
-                    @else
-                        <option value="">選択してください</option>
-                        @foreach($categories as $category)
-                            <option value="{{$category->id}}">{{$category->name}}</option>
-                        @endforeach
                     @endif
                 </select>
             </x-dash-form-component>
@@ -40,4 +35,48 @@
             </div>
         </form>
     </section>
+    <script>
+        // カテゴリーセレクトボックスの要素を取得
+        let parentSelect = document.getElementById('parent_select');
+        // カテゴリーリストを取得
+        let categories = {!! json_encode($categories) !!};
+
+        // カテゴリーリストが存在する場合、optionのグループを作成
+        if(categories!=null || 0< categories.length){
+
+            // すべてのoptionを一旦クリア
+            parentSelect.innerHTML = `<option value="">選択してください</option>`;
+            // 選択されたroleに合致するカテゴリを追加
+            function addCategoryOptionsToOptGroup(category, optGroup, depth = 0) {
+                const indent = '　'.repeat(depth); // 全角スペースでインデント
+
+                const option = document.createElement('option');
+                option.value = category.id;
+                option.textContent = indent + category.name;
+                optGroup.appendChild(option);
+
+                // 子カテゴリーがある場合は再帰的に追加
+                if (category.children && category.children.length > 0) {
+                    category.children.forEach(child => {
+                        addCategoryOptionsToOptGroup(child, optGroup, depth + 1);
+                    });
+                }
+            }
+
+            // 実行部分
+            categories.forEach(category => {
+                // ルートカテゴリー（role一致、parent_idがnull）
+                if (category.role === 1 && category.parent_id == null) {
+                    const newOptGroup = document.createElement('optgroup');
+                    newOptGroup.label = category.name;
+
+                    // 自分自身と子孫を再帰的に追加
+                    addCategoryOptionsToOptGroup(category, newOptGroup);
+
+                    parentSelect.appendChild(newOptGroup);
+                }
+            });
+        }
+    </script>
+
 </x-app-layout>
