@@ -45,7 +45,7 @@
 
 {{--tabコンテンツ--}}
 <div id="default-tab-content">
-    <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800 h-full" id="gun" role="tabpanel" aria-labelledby="gun-tab">
+    <div class="hidden rounded-lg bg-gray-50 dark:bg-gray-800 h-full" id="gun" role="tabpanel" aria-labelledby="gun-tab">
         <x-gun-list :dataArray="$dataArray" :categories="$categories"></x-gun-list>
     </div>
     <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="bullet" role="tabpanel" aria-labelledby="bullet-tab">

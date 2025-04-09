@@ -7,10 +7,10 @@
         transform: translateX(100%);
         opacity: 0;
     }
-    10% {
+    1% {
         opacity: 1;
     }
-    90% {
+    99% {
         opacity: 1;
     }
     100% {
@@ -23,7 +23,7 @@
     position: absolute;
     top: 70%;
     right: 0;
-    animation: slideToLogo 8s linear infinite;
+    animation: slideToLogo 12s linear infinite;
     z-index: 0; /* 背面に回す */
 }
 

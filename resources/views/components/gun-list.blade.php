@@ -1,25 +1,39 @@
-<h1 id="current_category" class="w-full font-bold text-xl"></h1>
-
 {{--フィルターボタン--}}
-<article class="w-full flex justify-center gap-6 py-8">
-    @foreach($categories as $category)
-        @if($category["parent_id"]!==null)
-            <button data-id="{{$category['id']}}" data-parent-id="{{$category["parent_id"]}}" data-category="{{$category}}" data-children="{{$category->children}}" class="child-category hidden bg-blue-500 text-white px-4 py-2 rounded-lg" onclick="Filter(event)">
-                {{$category->name}}
+<div class="border-b border-gray-200 w-full h-full min-h-[150px] flex bg-[#EFEFEF] ">
+    {{--ロゴアイコン--}}
+    <div class="text-gray-700 bg-[#EFEFEF] w-[150px] h-full min-h-[150px] border-r border-l border-white flex items-center justify-center">
+        フィルター
+    </div>
+    {{--タブメニュー--}}
+    <ul class="bg-[#EFEFEF] w-full flex flex-wrap -mb-px text-sm font-medium text-center h-full min-h-[150px]" id="default-tab" data-tabs-toggle="#default-tab-content" role="tablist">
+        @foreach($categories as $category)
+            @if($category["parent_id"]!==null)
+                <li class="hidden bg-[#EFEFEF] w-[20%] border-b border-r border-white flex items-center justify-center" role="presentation">
+                        <button data-id="{{$category['id']}}" data-parent-id="{{$category["parent_id"]}}" data-category="{{$category}}" data-children="{{$category->children}}" class="text-gray-700 child-category px-4 py-2 rounded-lg" onclick="Filter(event)">
+                            {{$category->name}}
+                        </button>
+                </li>
+            @else
+                <li class="bg-[#EFEFEF] w-[20%] border-b border-r border-white flex items-center justify-center" role="presentation">
+                        <button data-id="{{$category['id']}}" data-parent-id="{{$category["parent_id"]}}" data-category="{{$category}}" data-children="{{$category->children}}" class="text-gray-700 parent-category px-4 py-2 rounded-lg" onclick="Filter(event)">
+                            {{$category->name}}
+                        </button>
+                </li>
+            @endif
+        @endforeach
+        <li class="hidden bg-[#EFEFEF] w-[20%] border-b border-r border-white flex items-center justify-center" role="presentation">
+            <button id="back_btn" class="text-red-500 px-4 py-2 rounded-lg">
+                戻る
             </button>
-        @else
-            <button data-id="{{$category['id']}}" data-parent-id="{{$category["parent_id"]}}" data-category="{{$category}}" data-children="{{$category->children}}" class="parent-category bg-blue-500 text-white px-4 py-2 rounded-lg" onclick="Filter(event)">
-                {{$category->name}}
-            </button>
-        @endif
-    @endforeach
-        <button id="back_btn" class="hidden bg-red-500 text-white px-4 py-2 rounded-lg">
-            戻る
-        </button>
-</article>
+        </li>
+    </ul>
+</div>
+
+{{--現在のカテゴリーを表示する要素--}}
+<h1 id="current_category" class="w-full font-bold text-xl p-6"></h1>
 
 {{--一覧--}}
-<table>
+<table class="m-4">
     <thead>
         <tr>
             <th class="border border-gray-500 px-4 py-2">/</th>
@@ -301,7 +315,7 @@
     function ShowChildrenCategory(clickedCategoryId) {
         childCategoryBtns.forEach(category => {
             if (category.getAttribute("data-parent-id") === clickedCategoryId) {
-                category.classList.remove("hidden");
+                category.parentNode.classList.remove("hidden");
             }
         });
     }
@@ -311,12 +325,12 @@
 
         //ルートカテゴリーを非表示
         parentCategoryBtns.forEach(category => {
-            category.classList.add("hidden");
+            category.parentNode.classList.add("hidden");
         });
 
         //ルートカテゴリー以外を非表示
         childCategoryBtns.forEach(category => {
-            category.classList.add("hidden");
+            category.parentNode.classList.add("hidden");
         });
     }
 
@@ -365,7 +379,7 @@
     function BackToPreviousCategory() {
 
         // 戻るボタンを表示
-        document.getElementById("back_btn").classList.remove("hidden");
+        document.getElementById("back_btn").parentNode.classList.remove("hidden");
 
         // 戻るボタンをクリックした時の処理
         document.getElementById("back_btn").onclick = function() {
@@ -382,19 +396,19 @@
 
                 // 全てのルートカテゴリーを非表示
                 parentCategoryBtns.forEach(category => {
-                    category.classList.remove("hidden");
+                    category.parentNode.classList.remove("hidden");
                 });
 
                 // 全ての子カテゴリーを非表示
                 childCategoryBtns.forEach(category => {
-                    category.classList.add("hidden");
+                    category.parentNode.classList.add("hidden");
                 });
 
                 // 現在のカテゴリーの位置を示すh1を空文字に
                 document.getElementById("current_category").innerText = "";
 
                 // 戻るボタンを非表示
-                document.getElementById("back_btn").classList.add("hidden");
+                document.getElementById("back_btn").parentNode.classList.add("hidden");
 
                 // 現在のtbodyを削除
                 if(document.getElementById("new_tbody") !== null){
