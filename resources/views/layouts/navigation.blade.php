@@ -1,4 +1,4 @@
-<nav class="bg-white">
+<nav class="bg-white sticky top-0 z-50">
     <div class="flex items-center justify-between mx-auto pl-10 py-4">
         <a href="/" class="flex items-center gap-2">
             <img src="{{asset("storage/img/logo_1.jpg")}}" class="h-10 w-10">

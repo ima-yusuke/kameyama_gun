@@ -1,70 +1,87 @@
-{{--フィルターボタン--}}
-<div class="border-b border-gray-200 w-full h-full min-h-[150px] flex bg-[#EFEFEF] ">
-    {{--ロゴアイコン--}}
-    <div class="text-gray-700 bg-[#EFEFEF] w-[150px] h-full min-h-[150px] border-r border-l border-white flex items-center justify-center">
-        フィルター
-    </div>
-    {{--タブメニュー--}}
-    <ul class="bg-[#EFEFEF] w-full flex flex-wrap -mb-px text-sm font-medium text-center h-full min-h-[150px]" id="default-tab" data-tabs-toggle="#default-tab-content" role="tablist">
-        @foreach($categories as $category)
-            @if($category["parent_id"]!==null)
-                <li class="hidden bg-[#EFEFEF] w-[20%] border-b border-r border-white flex items-center justify-center" role="presentation">
-                        <button data-id="{{$category['id']}}" data-parent-id="{{$category["parent_id"]}}" data-category="{{$category}}" data-children="{{$category->children}}" class="text-gray-700 child-category px-4 py-2 rounded-lg" onclick="Filter(event)">
-                            {{$category->name}}
-                        </button>
-                </li>
-            @else
-                <li class="bg-[#EFEFEF] w-[20%] border-b border-r border-white flex items-center justify-center" role="presentation">
-                        <button data-id="{{$category['id']}}" data-parent-id="{{$category["parent_id"]}}" data-category="{{$category}}" data-children="{{$category->children}}" class="text-gray-700 parent-category px-4 py-2 rounded-lg" onclick="Filter(event)">
-                            {{$category->name}}
-                        </button>
-                </li>
-            @endif
-        @endforeach
-        <li class="hidden bg-[#EFEFEF] w-[20%] border-b border-r border-white flex items-center justify-center" role="presentation">
-            <button id="back_btn" class="text-red-500 px-4 py-2 rounded-lg">
-                戻る
-            </button>
-        </li>
-    </ul>
-</div>
-
 {{--現在のカテゴリーを表示する要素--}}
-<h1 id="current_category" class="w-full font-bold text-xl p-6"></h1>
+<h1 id="current_category" class="w-full font-bold text-xl p-6">全ての銃</h1>
 
-{{--一覧--}}
-<table class="m-4">
-    <thead>
+<section class="flex gap-4 w-full px-4">
+    {{--一覧--}}
+    <table class="w-[85%]">
+        <thead>
         <tr>
-            <th class="border border-gray-500 px-4 py-2">/</th>
-            <th class="border border-gray-500 px-4 py-2">品名（メーカー）</th>
-            <th class="border border-gray-500 px-4 py-2">カテゴリー</th>
-            <th class="border border-gray-500 px-4 py-2">口径</th>
+            <th class="border border-gray-500 py-2">/</th>
+            <th class="border border-gray-500 px-4 py-2">品名</th>
+            <th class="border border-gray-500 px-4 py-2 whitespace-nowrap">カテゴリー</th>
             <th class="border border-gray-500 px-4 py-2">料金</th>
-            <th class="border border-gray-500 px-4 py-2">ステータス</th>
+            <th class="border border-gray-500 px-4 py-2 whitespace-nowrap">在庫</th>
             <th class="border border-gray-500 px-4 py-2">備考欄</th>
         </tr>
-    </thead>
-    <tbody id="default_tbody">
+        </thead>
+        <tbody id="default_tbody">
         @foreach ($dataArray as $data)
             {{--銃でない（roleが0でない）場合はスキップ--}}
             @if($data->category["role"]!==0)
                 @continue
             @endif
-            <tr data-gun="{{json_encode($data)}}" data-gun-detail="{{json_encode($data->gunDetail)}}" data-category="{{json_encode($data->category)}}" onclick="OpenModal(event)">
-                <td class="border border-gray-500 px-4 py-2">{{ $data["id"] }}</td>
+            <tr>
+                <td class="border border-gray-500 px-4 py-4">
+                    <div class="flex justify-center items-center">
+                        <button data-gun="{{json_encode($data)}}" data-gun-detail="{{json_encode($data->gunDetail)}}" data-category="{{json_encode($data->category)}}" onclick="OpenModal(event)" class="button-21-open-modal py-2">
+                            {{ $data["id"] }}<br>詳細
+                        </button>
+                    </div>
+                </td>
                 <td class="border border-gray-500 px-4 py-2">{{ $data["name"] }}</td>
-                <td class="border border-gray-500 px-4 py-2">{{$data->category["name"]}}</td>
-                <td class="border border-gray-500 px-4 py-2">{{ $data->gunDetail["diameter"] }}</td>
-                <td class="border border-gray-500 px-4 py-2">{{ $data['price']==null?"未設定": "￥" .number_format($data['price'])}}</td>
-                <td class="border border-gray-500 px-4 py-2 {{$data['is_stock'] === 1 ? '':'text-red-500'}}">
-                    {{ $data["is_stock"]===1?"在庫有":"売約済"}}
+                <td class="border border-gray-500 px-4 py-2">
+                    <div class="flex justify-center items-center">
+                        {{$data->category["name"]}}
+                    </div>
+                </td>
+                <td class="border border-gray-500 px-4 py-2">
+                    <div class="flex justify-center items-center">
+                        {{ $data['price']==null?"-": "￥" .number_format($data['price'])}}
+                    </div>
+                </td>
+                <td class="border border-gray-500 px-4 py-2 {{$data['is_stock'] === 1 ? 'text-green-700':'text-red-500'}}">
+                    <div class="flex justify-center items-center">
+                        {{ $data["is_stock"]===1?"有":"無"}}
+                    </div>
                 </td>
                 <td class="border border-gray-500 px-4 py-2">{{ $data["note"] }}</td>
             </tr>
         @endforeach
-    </tbody>
-</table>
+        </tbody>
+    </table>
+
+    {{--フィルターボタン--}}
+    <div class="h-full flex w-[15%]">
+        {{--タブメニュー--}}
+        <ul class="w-full flex flex-col gap-6 -mb-px text-sm font-medium text-center h-full" id="default-tab" data-tabs-toggle="#default-tab-content" role="tablist">
+            <li class="w-full flex items-center justify-center">
+                <button class="button-21-gray !bg-gray-700 w-full !text-white px-4 py-2 rounded-lg">
+                    カテゴリー選択
+                </button>
+            </li>
+            @foreach($categories as $category)
+                @if($category["parent_id"]!==null)
+                    <li class="hidden w-full flex items-center justify-center" role="presentation">
+                        <button data-id="{{$category['id']}}" data-parent-id="{{$category["parent_id"]}}" data-category="{{$category}}" data-children="{{$category->children}}" class="button-21 w-full text-gray-700 child-category px-4 py-2 rounded-lg" onclick="Filter(event)">
+                            {{$category->name}}
+                        </button>
+                    </li>
+                @else
+                    <li class="w-full flex items-center justify-center" role="presentation">
+                        <button data-id="{{$category['id']}}" data-parent-id="{{$category["parent_id"]}}" data-category="{{$category}}" data-children="{{$category->children}}" class="button-21 w-full text-gray-700 parent-category px-4 py-2 rounded-lg" onclick="Filter(event)">
+                            {{$category->name}}
+                        </button>
+                    </li>
+                @endif
+            @endforeach
+            <li class="w-full hidden flex items-center justify-center" role="presentation">
+                <button id="back_btn" class="button-21-red w-full px-4 py-2 rounded-lg">
+                    戻る
+                </button>
+            </li>
+        </ul>
+    </div>
+</section>
 
 <!--modal -->
 <div id="static-modal" class="hidden fixed inset-0 z-50 flex justify-center items-center min-h-screen">
@@ -88,7 +105,7 @@
                 {{--画像--}}
                 <div id="image_container">
                     <p id="image_not_exist" class="hidden">画像が登録されていません</p>
-                    <img data-base-url="{{ asset('storage/img/') }}" id="modal_image" src="{{asset("storage/img/logo_1.jpg")}}" alt="gun" class="object-cover w-[100%] h-[300px]">
+                    <img data-base-url="{{ asset('storage/img/') }}" id="modal_image" src="{{asset("storage/img/logo_1.jpg")}}" alt="gun" class="object-cover w-[100%] xl:h-[300px] md:h-[200px]">
                 </div>
                 <aside class="flex flex-wrap gap-4 w-full">
                     {{--カテゴリー--}}
@@ -149,7 +166,7 @@
         // バックドロップを表示
         modalBackdrop.classList.remove('hidden');
 
-        // e.currentTargetで<tr>要素を取得。
+        // e.currentTargetで<button>要素を取得。
         let data = JSON.parse(e.currentTarget.getAttribute("data-gun"));//itemsテーブル
         let gunDetail = JSON.parse(e.currentTarget.getAttribute("data-gun-detail"));//gun_detailsテーブル
         let category = JSON.parse(e.currentTarget.getAttribute("data-category"));//categoriesテーブル
@@ -268,8 +285,8 @@
         ShowChildrenCategory(clickedCategoryId);
 
         //現在の位置を表示するh1要素のテキストを更新
-        if(document.getElementById("current_category").innerText===""){
-            document.getElementById("current_category").innerHTML =  event.currentTarget.innerText;
+        if(document.getElementById("current_category").innerText==="全ての銃"){
+            document.getElementById("current_category").innerHTML += " -> " + event.currentTarget.innerText;
         }else{
             document.getElementById("current_category").innerHTML += " -> " + event.currentTarget.innerText;
         }
@@ -287,22 +304,35 @@
     function AppendRow(tableBody, data) {
         let row = document.createElement("tr");
 
-        row.setAttribute("data-gun", JSON.stringify(data));
-        row.setAttribute("data-gun-detail", JSON.stringify(data.gun_detail));
-        row.setAttribute("data-category", JSON.stringify(data.category));
-
-        row.onclick = function(event) {
-            OpenModal(event);
-        };
-
         row.innerHTML = `
-            <td class="border border-gray-500 px-4 py-2">${data.id}</td>
+            <td class="border border-gray-500 px-4 py-4">
+                <div class="flex justify-center items-center">
+                    <button
+                        class="button-21-open-modal py-2"
+                        data-gun='${JSON.stringify(data)}'
+                        data-gun-detail='${JSON.stringify(data.gun_detail)}'
+                        data-category='${JSON.stringify(data.category)}'
+                        onclick="OpenModal(event)"
+                    >
+                        ${data.id}<br>詳細
+                    </button>
+                </div>
+            </td>
             <td class="border border-gray-500 px-4 py-2">${data.name}</td>
-            <td class="border border-gray-500 px-4 py-2">${data.category.name}</td>
-            <td class="border border-gray-500 px-4 py-2">${data.gun_detail.diameter}</td>
-            <td class="border border-gray-500 px-4 py-2">${data.price == null ? "未設定" : "￥" + new Intl.NumberFormat().format(data.price)}</td>
-            <td class="border border-gray-500 px-4 py-2 ${data.is_stock === 1 ? '' : 'text-red-500'}">
-                ${data.is_stock === 1 ? "在庫有" : "売約済"}
+            <td class="border border-gray-500 px-4 py-2">
+                <div class="flex justify-center items-center">
+                    ${data.category.name}
+                </div>
+            </td>
+            <td class="border border-gray-500 px-4 py-2">
+                <div class="flex justify-center items-center">
+                    ${data.price == null ? "-" : "￥" + new Intl.NumberFormat().format(data.price)}
+                </div>
+            </td>
+            <td class="border border-gray-500 px-4 py-2 ${data.is_stock === 1 ? 'text-green-700' : 'text-red-500'}">
+                <div class="flex justify-center items-center">
+                    ${data.is_stock === 1 ? "有" : "無"}
+                </div>
             </td>
             <td class="border border-gray-500 px-4 py-2">${data.note == null ? "" :data.note}</td>
         `;
@@ -405,7 +435,7 @@
                 });
 
                 // 現在のカテゴリーの位置を示すh1を空文字に
-                document.getElementById("current_category").innerText = "";
+                document.getElementById("current_category").innerText = "全ての銃";
 
                 // 戻るボタンを非表示
                 document.getElementById("back_btn").parentNode.classList.add("hidden");

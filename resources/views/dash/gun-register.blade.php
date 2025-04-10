@@ -17,8 +17,8 @@
             {{--在庫--}}
             <x-dash-form-component :flag="true" title="在庫">
                 <div class="flex items-center gap-4">
-                    <input type="radio" required name="is_stock" value="1" class="rounded-lg"> 有り
-                    <input type="radio" required name="is_stock" value="0" class="rounded-lg"> 無し（売約済）
+                    <input type="radio" required name="is_stock" value="1" class="rounded-lg"> 有
+                    <input type="radio" required name="is_stock" value="0" class="rounded-lg"> 無（売約済）
                 </div>
             </x-dash-form-component>
             {{--全長--}}

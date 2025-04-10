@@ -2,6 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
+/*フロントtab / フィルターボタン*/
 @keyframes slideToLogo {
     0% {
         transform: translateX(100%);
@@ -27,3 +28,64 @@
     z-index: 0; /* 背面に回す */
 }
 
+/*フロント銃 / フィルターボタン*/
+.button-21 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 250px;
+    padding: 1em 2em;
+    border: 1px solid #e7e7e7;
+    border-radius: 5px;
+    box-shadow: 6px 6px 12px #c5c5c5, -6px -6px 12px #fff;
+    background-color: #e7e7e7;
+    color: #555555;
+    font-weight: 600;
+}
+
+.button-21:hover {
+    box-shadow: inset 4px 4px 12px #c5c5c5, inset -4px -4px 12px #fff;
+}
+
+/*戻るボタン*/
+.button-21-red {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 250px;
+    padding: 1em 2em;
+    border: 1px solid #ef4444;
+    border-radius: 5px;
+    box-shadow: 0.5px 0.5px 1px #c73737, -0.5px -0.5px 1px #ff5f5f;
+    background-color: #ef4444;
+    color: #fff;
+    font-weight: 600;
+    transition: box-shadow 0.2s ease-in-out;
+}
+
+.button-21-red:hover {
+    box-shadow: inset 4px 4px 12px #c73737, inset -4px -4px 12px #ff5f5f;
+}
+
+/*フィルターボタンの表紙*/
+.button-21-gray {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 250px;
+    padding: 1em 2em;
+    border: 1px solid #e7e7e7;
+    border-radius: 5px;
+    font-weight: 600;
+}
+
+/*詳細ボタン*/
+.button-21-open-modal {
+    width: 80px;
+    border: 1px solid #e7e7e7;
+    border-radius: 5px;
+    box-shadow: 6px 6px 12px #c5c5c5, -6px -6px 12px #fff;
+    background-color: #e7e7e7;
+    color: #555555;
+    font-weight: 600;
+}

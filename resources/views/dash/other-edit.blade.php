@@ -1,13 +1,13 @@
 <x-app-layout>
-    <section class="w-full h-full flex items-center justify-center py-10">
-        <table>
+    <section class="min-w-full h-full flex items-start justify-center p-10">
+        <table class="w-full">
             <thead>
             <tr>
                 <th class="border border-gray-500 px-4 py-2">/</th>
                 <th class="border border-gray-500 px-4 py-2">品名</th>
-                <th class="border border-gray-500 px-4 py-2">カテゴリー</th>
-                <th class="border border-gray-500 px-4 py-2">ステータス</th>
+                <th class="border border-gray-500 px-4 py-2 whitespace-nowrap">カテゴリー</th>
                 <th class="border border-gray-500 px-4 py-2">料金</th>
+                <th class="border border-gray-500 px-4 py-2 whitespace-nowrap">在庫</th>
                 <th class="border border-gray-500 px-4 py-2">備考欄</th>
                 <th class="border border-gray-500 px-4 py-2">編集</th>
                 <th class="border border-gray-500 px-4 py-2">削除</th>
@@ -21,17 +21,31 @@
                 <tr>
                     <td class="border border-gray-500 px-4 py-2">{{ $item["id"] }}</td>
                     <td class="border border-gray-500 px-4 py-2">{{ $item["name"] }}</td>
-                    <td class="border border-gray-500 px-4 py-2">{{$item->category["name"]}}</td>
-                    <td class="border border-gray-500 px-4 py-2 {{$item['is_stock'] === 1 ? '':'text-red-500'}}">
-                        {{ $item["is_stock"]===1?"在庫有":"売約済"}}
+                    <td class="border border-gray-500 px-4 py-2">
+                        <div class="flex justify-center items-center">
+                            {{$item->category["name"]}}
+                        </div>
                     </td>
-                    <td class="border border-gray-500 px-4 py-2">{{ $item['price']==null?"未設定": "￥" .number_format($item['price'])}}</td>
+                    <td class="border border-gray-500 px-4 py-2">
+                        <div class="flex justify-center items-center">
+                            {{ $item['price']==null?"未設定": "￥" .number_format($item['price'])}}
+                        </div>
+                    </td>
+                    <td class="border border-gray-500 px-4 py-2 {{$item['is_stock'] === 1 ? 'text-green-700':'text-red-500'}}">
+                        <div class="flex justify-center items-center">
+                            {{ $item["is_stock"]===1?"在":"無"}}
+                        </div>
+                    </td>
                     <td class="border border-gray-500 px-4 py-2">{{ $item["note"] }}</td>
                     <td class="border border-gray-500 px-4 py-2">
-                        <button data-bullet="{{json_encode($item)}}" data-category="{{json_encode($item->category)}}" onclick="OpenOtherEditModal(event)" class="bg-blue-500 text-white px-4 py-1 rounded-lg">編集</button>
+                        <div class="flex justify-center items-center">
+                            <button data-bullet="{{json_encode($item)}}" data-category="{{json_encode($item->category)}}" onclick="OpenOtherEditModal(event)" class="whitespace-nowrap bg-blue-500 text-white px-4 py-1 rounded-lg">編集</button>
+                        </div>
                     </td>
                     <td class="border border-gray-500 px-4 py-2">
-                        <a onclick="return confirm('本当に削除しますか？');" href="{{ route('admin.other.delete', $item['id']) }}" class="bg-red-500 text-white px-4 py-1 rounded-lg">削除</a>
+                        <div class="flex justify-center items-center">
+                            <a onclick="return confirm('本当に削除しますか？');" href="{{ route('admin.other.delete', $item['id']) }}" class="whitespace-nowrap bg-red-500 text-white px-4 py-1 rounded-lg">削除</a>
+                        </div>
                     </td>
                 </tr>
             @endforeach
@@ -40,7 +54,7 @@
     </section>
 
     <!--modal -->
-    <div id="other_edit_modal" class="hidden fixed top-1/2 transform -translate-y-1/2 inset-0 z-50 flex justify-center items-center w-full h-[70%] overflow-y-scroll">
+    <div id="other_edit_modal" class="hidden fixed top-1/2 transform -translate-y-1/2 inset-0 z-50 flex justify-center items-center w-full h-[80%] overflow-y-scroll">
         <div class="relative p-4 w-[80%] h-full">
             <!-- Modal content -->
             <div class="relative bg-white rounded-lg shadow-sm dark:bg-gray-700 w-full">
