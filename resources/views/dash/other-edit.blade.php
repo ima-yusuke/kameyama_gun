@@ -20,7 +20,7 @@
                 @endif
                 <tr>
                     <td class="border border-gray-500 px-4 py-2">{{ $item["id"] }}</td>
-                    <td class="border border-gray-500 px-4 py-2">{{ $item["name"] }}</td>
+                    <td class="border border-gray-500 px-4 py-2 whitespace-nowrap">{{ $item["name"] }}</td>
                     <td class="border border-gray-500 px-4 py-2">
                         <div class="flex justify-center items-center">
                             {{$item->category["name"]}}

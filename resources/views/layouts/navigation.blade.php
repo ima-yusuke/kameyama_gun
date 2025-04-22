@@ -2,7 +2,6 @@
     <div class="flex items-center justify-between mx-auto pl-10 py-4">
         <a href="/" class="flex items-center gap-2">
             <img src="{{asset("storage/img/logo_1.jpg")}}" class="h-10 w-10">
-            <p class="hidden sm:flex items-center font-bold text-xl">亀山鉄砲</p>
         </a>
 
         <div class="hidden w-full md:block md:w-auto" id="navbar-dropdown">

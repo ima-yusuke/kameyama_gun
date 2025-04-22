@@ -1,59 +1,47 @@
 {{--現在のカテゴリーを表示する要素--}}
 <h1 id="current_category" class="w-full font-bold text-xl p-6">全ての銃</h1>
 
-<section class="flex gap-4 w-full px-4">
-    {{--一覧--}}
-    <table class="w-[85%]">
-        <thead>
-        <tr>
-            <th class="border border-gray-500 py-2">/</th>
-            <th class="border border-gray-500 px-4 py-2">品名</th>
-            <th class="border border-gray-500 px-4 py-2 whitespace-nowrap">カテゴリー</th>
-            <th class="border border-gray-500 px-4 py-2">料金</th>
-            <th class="border border-gray-500 px-4 py-2 whitespace-nowrap">在庫</th>
-            <th class="border border-gray-500 px-4 py-2">備考欄</th>
-        </tr>
-        </thead>
-        <tbody id="default_tbody">
-        @foreach ($dataArray as $data)
-            {{--銃でない（roleが0でない）場合はスキップ--}}
-            @if($data->category["role"]!==0)
-                @continue
-            @endif
+<section class="flex gap-4 w-full px-4 h-[70vh]">
+    {{-- テーブル表示エリア --}}
+    <div class="w-[83%] h-full overflow-y-auto">
+        <table class="w-full">
+            <thead class="sticky top-0 bg-white z-10">
             <tr>
-                <td class="border border-gray-500 px-4 py-4">
-                    <div class="flex justify-center items-center">
-                        <button data-gun="{{json_encode($data)}}" data-gun-detail="{{json_encode($data->gunDetail)}}" data-category="{{json_encode($data->category)}}" onclick="OpenModal(event)" class="button-21-open-modal py-2">
-                            {{ $data["id"] }}<br>詳細
-                        </button>
-                    </div>
-                </td>
-                <td class="border border-gray-500 px-4 py-2">{{ $data["name"] }}</td>
-                <td class="border border-gray-500 px-4 py-2">
-                    <div class="flex justify-center items-center">
-                        {{$data->category["name"]}}
-                    </div>
-                </td>
-                <td class="border border-gray-500 px-4 py-2">
-                    <div class="flex justify-center items-center">
-                        {{ $data['price']==null?"-": "￥" .number_format($data['price'])}}
-                    </div>
-                </td>
-                <td class="border border-gray-500 px-4 py-2 {{$data['is_stock'] === 1 ? 'text-green-700':'text-red-500'}}">
-                    <div class="flex justify-center items-center">
-                        {{ $data["is_stock"]===1?"有":"無"}}
-                    </div>
-                </td>
-                <td class="border border-gray-500 px-4 py-2">{{ $data["note"] }}</td>
+                <th class="border border-gray-500 py-2">/</th>
+                <th class="border border-gray-500 px-4 py-2 whitespace-nowrap">品名</th>
+                <th class="border border-gray-500 px-4 py-2 whitespace-nowrap">カテゴリー</th>
+                <th class="border border-gray-500 px-4 py-2">料金</th>
+                <th class="border border-gray-500 px-4 py-2 whitespace-nowrap">在庫</th>
+                <th class="border border-gray-500 px-4 py-2">備考欄</th>
             </tr>
-        @endforeach
-        </tbody>
-    </table>
+            </thead>
+            <tbody id="default_tbody">
+            @foreach ($dataArray as $data)
+                @if($data->category["role"]!==0)
+                    @continue
+                @endif
+                <tr>
+                    <td class="border border-gray-500 px-4 py-4">
+                        <div class="flex justify-center items-center">
+                            <button data-gun="{{json_encode($data)}}" data-gun-detail="{{json_encode($data->gunDetail)}}" data-category="{{json_encode($data->category)}}" onclick="OpenModal(event)" class="button-21-open-modal py-2">
+                                {{ $data["id"] }}<br>詳細
+                            </button>
+                        </div>
+                    </td>
+                    <td class="border border-gray-500 px-4 py-2 whitespace-nowrap">{{ $data["name"] }}</td>
+                    <td class="border border-gray-500 px-4 py-2 text-center">{{ $data->category["name"] }}</td>
+                    <td class="border border-gray-500 px-4 py-2 text-center whitespace-nowrap">{{ $data['price']==null?"-": "￥" .number_format($data['price'])}}</td>
+                    <td class="border border-gray-500 px-4 py-2 text-center {{ $data['is_stock'] === 1 ? 'text-green-700':'text-red-500'}}">{{ $data["is_stock"]===1?"有":"無" }}</td>
+                    <td class="border border-gray-500 px-4 py-2">{{ $data["note"] }}</td>
+                </tr>
+            @endforeach
+            </tbody>
+        </table>
+    </div>
 
-    {{--フィルターボタン--}}
-    <div class="h-full flex w-[15%]">
-        {{--タブメニュー--}}
-        <ul class="w-full flex flex-col gap-6 -mb-px text-sm font-medium text-center h-full" id="default-tab" data-tabs-toggle="#default-tab-content" role="tablist">
+    {{-- フィルターメニュー --}}
+    <div class="w-[17%] h-full overflow-y-auto">
+        <ul class="w-full flex flex-col gap-6 text-sm font-medium text-center" id="default-tab" data-tabs-toggle="#default-tab-content" role="tablist">
             <li class="w-full flex items-center justify-center">
                 <button class="button-21-gray !bg-gray-700 w-full !text-white px-4 py-2 rounded-lg">
                     カテゴリー選択
@@ -82,6 +70,7 @@
         </ul>
     </div>
 </section>
+
 
 <!--modal -->
 <div id="static-modal" class="hidden fixed inset-0 z-50 flex justify-center items-center min-h-screen">

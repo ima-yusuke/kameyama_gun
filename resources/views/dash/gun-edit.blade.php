@@ -55,7 +55,7 @@
 
     <!--modal -->
     <div id="gun_edit_modal" class="hidden fixed top-1/2 transform -translate-y-1/2 inset-0 z-50 flex justify-center items-center w-full h-[80%] overflow-y-scroll">
-        <div class="relative p-4 w-[80%] h-full">
+        <div class="relative p-4 w-[85%] h-full">
             <!-- Modal content -->
             <div class="relative bg-white rounded-lg shadow-sm dark:bg-gray-700 w-full">
                 <!-- Modal header -->
@@ -123,17 +123,18 @@
                         </x-dash-form-component>
                         {{--画像--}}
                         <x-dash-form-component :flag="false" title="画像">
-                            <aside class="flex gap-8">
-                                <div class="flex flex-col items-center gap-1 border-r border-dashed border-gray-500 px-8">
-                                    <p>現在の画像</p>
+                            <aside class="flex gap-8 w-full">
+                                <div class="w-[40%] flex flex-col items-center gap-1 border-r border-dashed border-gray-500 px-6">
+                                    <p class="text-center">現在の画像</p>
                                     <p id="gun_image_not_exist" class="hidden">画像が登録されていません</p>
-                                    <img data-base-url="{{ asset('storage/img/') }}" src="" id="gun_modal_img" class="w-[200px] h-[150px] object-cover">
+                                    <img data-base-url="{{ asset('storage/img/') }}" src="" id="gun_modal_img" class="w-[90%] object-cover">
                                 </div>
-                                <div class="flex flex-col items-center gap-1">
+                                <div class="w-[60%] flex flex-col items-center gap-1">
                                     <p>新しい画像</p>
-                                    <input type="file" accept="image/png, image/jpeg, image/jpg" name="image" class="rounded-lg">
+                                    <input type="file" accept="image/png, image/jpeg, image/jpg" name="image" class="w-full max-w-xs rounded-lg">
                                 </div>
                             </aside>
+
                         </x-dash-form-component>
                         {{--備考欄--}}
                         <x-dash-form-component :flag="false" title="備考欄">

@@ -1,5 +1,5 @@
 {{--tabメニュー--}}
-<div class="sticky top-0 z-50 border-b border-gray-200 w-full flex bg-[#FAFAFA]">
+<div class="sticky top-0 z-30 border-b border-gray-200 w-full flex bg-[#FAFAFA]">
     {{--ロゴアイコン--}}
     <div class="z-10 bg-white w-[80px] h-[80px] border-r border-l border-gray-200 flex items-center justify-center">
         <img src="{{asset("storage/img/logo_1.jpg")}}" class="object-cover w-[50px] h-[50px]">
@@ -45,15 +45,15 @@
 </div>
 
 {{--tabコンテンツ--}}
-<div id="default-tab-content" class="py-6 flex-1 bg-gray-50">
-    <div class="hidden rounded-lg bg-gray-50 dark:bg-gray-800 h-full" id="gun" role="tabpanel" aria-labelledby="gun-tab">
+<div id="default-tab-content" class="flex-1 h-full bg-gray-50">
+    <div class="hidden rounded-lg bg-gray-50 h-full" id="gun" role="tabpanel" aria-labelledby="gun-tab">
         <x-gun-list :dataArray="$dataArray" :categories="$categories"></x-gun-list>
     </div>
-    <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800 h-full" id="bullet" role="tabpanel" aria-labelledby="bullet-tab">
+    <div class="hidden p-4 rounded-lg bg-gray-50 h-full" id="bullet" role="tabpanel" aria-labelledby="bullet-tab">
         <x-bullet-list :dataArray="$dataArray"></x-bullet-list>
 
     </div>
-    <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800 h-full" id="others" role="tabpanel" aria-labelledby="others-tab">
+    <div class="hidden p-4 rounded-lg bg-gray-50 h-full" id="others" role="tabpanel" aria-labelledby="others-tab">
         <x-other-list :dataArray="$dataArray"></x-other-list>
     </div>
 </div>
