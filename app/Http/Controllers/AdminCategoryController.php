@@ -10,7 +10,7 @@ class AdminCategoryController extends Controller
     //カテゴリー登録画面表示
     public function Show()
     {
-        $categories = Category::orderBy('role')->get();
+        $categories = Category::orderBy('role')->with('children')->get();
         return view('dash.category-register',compact('categories'));
     }
 
