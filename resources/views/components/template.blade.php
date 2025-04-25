@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title>亀山鉄砲</title>
-    <link rel="manifest" href="manifest.json">
+    <link rel="manifest" href="/build/manifest.json">
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
