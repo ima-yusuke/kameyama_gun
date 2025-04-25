@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title>亀山鉄砲</title>
+    <link rel="manifest" href="manifest.json">
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
@@ -20,5 +21,15 @@
     <footer class="h-[5dvh] flex items-center justify-center bg-[#FAFAFA]">
         <p class="text-sm text-gray-500">© 2025 Kameyama Guns. All rights reserved.</p>
     </footer>
+    <script>
+        // ServiceWorker登録：https://developers.google.com/web/fundamentals/primers/service-workers/?hl=ja
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sw.js').then(function(registration) {
+                console.log('ServiceWorker registration successful with scope: ', registration.scope);
+            }).catch(function(err) {
+                console.log('ServiceWorker registration failed: ', err);
+            });
+        }
+    </script>
 </body>
 </html>
