@@ -1,12 +1,7 @@
 var CACHE_NAME = 'kameyama-guns-assets-v1';
 var urlsToCache = [
-    "/",
-    "index.php",
-    "css/app.css",
-    "js/app.js",
-    "storage/img/logo_1_white.png",
-    "storage/img/logo_1.jpg",
-
+    "/storage/img/logo_1_white.png",
+    "/storage/img/logo_1.jpg",
 ];
 
 // インストール処理
