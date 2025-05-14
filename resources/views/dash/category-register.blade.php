@@ -60,7 +60,7 @@
             if(categories!=null || 0< categories.length){
 
                 // すべてのoptionを一旦クリア
-                parentSelect.innerHTML = `<option value="">選択してください</option>`;
+                parentSelect.innerHTML = `<option value="">選択してください</option><option value="0">ルートカテゴリー</option>`;
                 // 選択されたroleに合致するカテゴリを追加
                 function addCategoryOptionsToOptGroup(category, optGroup, depth = 0) {
                     const indent = '　'.repeat(depth); // 全角スペースでインデント
