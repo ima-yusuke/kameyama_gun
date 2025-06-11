@@ -18,8 +18,8 @@
         {{ $slot }}
     </main>
 
-    <footer class="h-[5dvh] flex items-center justify-center bg-[#FAFAFA]">
-        <p class="text-sm text-gray-500">© 2025 Kameyama Guns. All rights reserved.</p>
+    <footer class="h-[5dvh] flex items-center justify-center bg-[#B8955F]">
+        <p class="text-sm font-bold tracking-widest">© Kameyama-gunshop</p>
     </footer>
     <script>
         // ServiceWorker登録：https://developers.google.com/web/fundamentals/primers/service-workers/?hl=ja
