@@ -21,9 +21,9 @@ class ProductListController extends Controller
         $this->loadItemsRecursively($categories);
 
         // 全ての items を category & gunDetail 付きで取得
-        $dataArray = Item::with(['category.children', 'gunDetail'])->orderBy("category_id")->orderBy("id")->get();
+        $itemArray = Item::with(['category.children', 'gunDetail'])->orderBy("category_id")->orderBy("id")->get();
 
-        return view('product-list', compact('dataArray', 'categories'));
+        return view('product-list', compact('itemArray', 'categories'));
     }
 
     public function loadItemsRecursively($categories)
