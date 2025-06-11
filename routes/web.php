@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MainController;
+use App\Http\Controllers\ProductListController;
 use App\Http\Controllers\AdminGunController;
 use App\Http\Controllers\AdminCategoryController;
 use App\Http\Controllers\AdminBulletController;
@@ -10,6 +11,9 @@ use App\Http\Controllers\AdminOtherController;
 
 //トップページ表示
 Route::get('/', [MainController::class, 'show'])->name('show');
+
+//商品一覧ページ表示
+Route::get('/product-list', [ProductListController::class, 'Show'])->name('product-list.show');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
