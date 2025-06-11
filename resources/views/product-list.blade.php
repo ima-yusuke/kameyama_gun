@@ -1,3 +1,4 @@
 <x-template>
-    <h1>ｇｓｇｓ</h1>
+    {{--公式ホームページのナビゲーションメニュー--}}
+    <x-product-list-nav></x-product-list-nav>
 </x-template>
