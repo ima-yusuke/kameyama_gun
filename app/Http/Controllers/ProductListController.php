@@ -8,25 +8,22 @@ use Illuminate\Http\Request;
 
 class ProductListController extends Controller
 {
-    public function Show(Request $request)
+    public function Show()
     {
         // 最初に Category をロード（items には category と gunDetail を含める）
         $categories = Category::with([
             'children', // 再帰的な子カテゴリ
             'items.category', // items の category をロード
             'items.gunDetail', // items の gunDetail をロード
-        ])->where('role', 0)->get();
+        ])->get();
 
         // 子カテゴリの items に category と gunDetail を含める
         $this->loadItemsRecursively($categories);
 
-        // 全ての items を category & gunDetail 付きで取得
-        $itemArray = Item::with(['category.children', 'gunDetail'])->orderBy("category_id")->orderBy("id")->get();
-
-        return view('product-list', compact('itemArray', 'categories'));
+        return view('product-list', compact( 'categories'));
     }
 
-    public function loadItemsRecursively($categories)
+    private function loadItemsRecursively($categories)
     {
         foreach ($categories as $category) {
             // 子カテゴリの items に category と gunDetail を含める

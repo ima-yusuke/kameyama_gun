@@ -23,7 +23,7 @@
                 <tr>
                     <td class="border border-gray-500 px-4 py-4">
                         <div class="flex justify-center items-center">
-                            <button data-gun="{{json_encode($data)}}" data-gun-detail="{{json_encode($data->gunDetail)}}" data-category="{{json_encode($data->category)}}" onclick="OpenModal(event)" class="button-21-open-modal py-2">
+                            <button data-gun="{{json_encode($data)}}" data-gun-detail="{{json_encode($data->gunDetail)}}" data-category="{{json_encode($data->category)}}" onclick="OpenGunModal(event)" class="button-21-open-modal py-2">
                                 {{ $data["id"] }}<br>詳細
                             </button>
                         </div>
@@ -71,155 +71,10 @@
     </div>
 </section>
 
-
 <!--modal -->
-<div id="static-modal" class="hidden fixed inset-0 z-50 flex justify-center items-center min-h-screen">
-    <div class="relative p-4 w-full max-w-2xl max-h-full">
-        <!-- Modal content -->
-        <div class="relative bg-white rounded-lg shadow-sm dark:bg-gray-700">
-            <!-- Modal header -->
-            <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600 border-gray-200">
-                {{--品名--}}
-                <h3 id="modal_title" class="text-xl font-semibold text-gray-900 dark:text-white"></h3>
-                {{--閉じるボタン--}}
-                <button onclick="CloseModal()" type="button" id="modal-close-btn" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="static-modal">
-                    <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
-                    </svg>
-                    <span class="sr-only">Close modal</span>
-                </button>
-            </div>
-            <!-- Modal body -->
-            <div class="p-4 md:p-5 space-y-4">
-                {{--画像--}}
-                <div id="image_container">
-                    <p id="image_not_exist" class="hidden">画像が登録されていません</p>
-                    <img data-base-url="{{ asset('storage/img/') }}" id="modal_image" src="{{asset("storage/img/logo_1.jpg")}}" alt="gun" class="object-cover w-[100%] xl:h-[300px] md:h-[200px]">
-                </div>
-                <aside class="flex flex-wrap gap-4 w-full">
-                    {{--カテゴリー--}}
-                    <div class="flex items-center gap-4 w-[45%]">
-                        <p class="bg-gray-600 text-white py-1 w-[120px] text-center">カテゴリー</p>
-                        <p id="modal_category"></p>
-                    </div>
-                    {{--生産国--}}
-                    <div class="flex items-center gap-4 w-[45%]">
-                        <p class="bg-gray-600 text-white py-1 w-[120px] text-center">生産国</p>
-                        <p id="modal_country"></p>
-                    </div>
-                    {{--価格--}}
-                    <div class="flex items-center gap-4 w-[45%]">
-                        <p class="bg-gray-600 text-white py-1 w-[120px] text-center">料金</p>
-                        <p id="modal_price"></p>
-                    </div>
-                    {{--ブランド--}}
-                    <div class="flex items-center gap-4 w-[45%]">
-                        <p class="bg-gray-600 text-white py-1 w-[120px] text-center">ブランド</p>
-                        <p id="modal_brand"></p>
-                    </div>
-                </aside>
-                <p class="w-full border-b border-dashed border-gray-500"></p>
-                <aside class="flex flex-wrap gap-4 w-full">
-                    {{--全長--}}
-                    <div class="flex items-center gap-4 w-[45%]">
-                        <p class="bg-gray-600 text-white py-1 w-[120px] text-center">全長</p>
-                        <p id="modal_full_length"></p>
-                    </div>
-                    {{--総重量--}}
-                    <div class="flex items-center gap-4 w-[45%]">
-                        <p class="bg-gray-600 text-white py-1 w-[120px] text-center">総重量</p>
-                        <p id="modal_full_weight"></p>
-                    </div>
-                    {{--口径--}}
-                    <div class="flex items-center gap-4 w-[45%]">
-                        <p class="bg-gray-600 text-white py-1 w-[120px] text-center">口径</p>
-                        <p id="modal_diameter"></p>
-                    </div>
-                </aside>
-            </div>
-        </div>
-    </div>
-</div>
-<div id="modal_backdrop" class="hidden bg-gray-900 bg-opacity-50 dark:bg-opacity-80 fixed inset-0 z-40"></div>
+<x-product-list-gun-modal></x-product-list-gun-modal>
 
 <script>
-    //モダル要素
-    const modal = document.getElementById('static-modal');
-    //モダルオープン時のグレー背景
-    const modalBackdrop = document.getElementById('modal_backdrop');
-    //モダルを開く（trをクリック時に発火）
-    function OpenModal(e) {
-
-        // モーダルを表示
-        modal.classList.remove('hidden');
-        // バックドロップを表示
-        modalBackdrop.classList.remove('hidden');
-
-        // e.currentTargetで<button>要素を取得。
-        let data = JSON.parse(e.currentTarget.getAttribute("data-gun"));//itemsテーブル
-        let gunDetail = JSON.parse(e.currentTarget.getAttribute("data-gun-detail"));//gun_detailsテーブル
-        let category = JSON.parse(e.currentTarget.getAttribute("data-category"));//categoriesテーブル
-
-        // 以下、モダルに表示する内容を設定
-
-        // 品名とモデル
-        const modalTitle = document.getElementById('modal_title');
-        if (gunDetail.model == null) {
-            modalTitle.textContent = `品名：${data.name} / モデル：未設定`;
-        } else {
-            modalTitle.textContent = `品名：${data.name} / モデル：${gunDetail.model}`;
-        }
-        //画像
-        const modalImage = document.getElementById('modal_image');
-        const baseUrl = modalImage.getAttribute("data-base-url");//asset関数後のベースURL
-        if (gunDetail.image == null) {
-            modalImage.classList.add('hidden');
-            document.getElementById('image_not_exist').classList.remove('hidden');
-        } else {
-            document.getElementById('image_not_exist').classList.add('hidden');
-            modalImage.classList.remove('hidden');
-            modalImage.src = `${baseUrl}/${data.id}/${gunDetail.image}`;
-        }
-        // カテゴリー
-        const modalCategory = document.getElementById('modal_category');
-        modalCategory.textContent = category.name;
-        // 生産国
-        const modalCountry = document.getElementById('modal_country');
-        if(gunDetail.country == null){
-            modalCountry.textContent = '未設定';
-        } else {
-            modalCountry.textContent = gunDetail.country;
-        }
-        // 料金
-        const modalPrice = document.getElementById('modal_price');
-        if (data.price == null) {
-            modalPrice.textContent = '未設定';
-        } else{
-            modalPrice.textContent = `￥${data.price.toLocaleString()}`;
-        }
-        // ブランド
-        const modalBrand = document.getElementById('modal_brand');
-        if(gunDetail.brand == null){
-            modalBrand.textContent = '未設定';
-        } else {
-            modalBrand.textContent = gunDetail.brand;
-        }
-        // 全長
-        const modalFullLength = document.getElementById('modal_full_length');
-        modalFullLength.textContent = gunDetail.full_length;
-        // 総重量
-        const modalFullWeight = document.getElementById('modal_full_weight');
-        modalFullWeight.textContent = gunDetail.full_weight;
-        // 口径
-        const modalDiameter = document.getElementById('modal_diameter');
-        modalDiameter.textContent = gunDetail.diameter;
-    }
-    //モダルを閉じる（ボタンにonclickで指定）
-    function CloseModal(){
-        modal.classList.add('hidden');  // モーダルを非表示
-        modalBackdrop.classList.add('hidden');  // バックドロップを非表示
-    }
-
     //itemsデータ
     let dataArray = @json($dataArray);
     //クリックしたカテゴリーボタンのidを保持する配列（戻るボタンの処理用）
