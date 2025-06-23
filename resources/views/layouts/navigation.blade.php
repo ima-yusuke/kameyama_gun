@@ -1,21 +1,21 @@
 <nav class="bg-white sticky top-0 z-50">
-    <div class="flex items-center justify-between mx-auto pl-10 py-4">
-        <a href="/" class="flex items-center gap-2">
-            <img src="{{asset("storage/img/logo_1.jpg")}}" class="h-10 w-10">
-        </a>
-
-        <div class="hidden w-full md:block md:w-auto" id="navbar-dropdown">
-            <ul class="flex items-center font-medium md:p-0 bg-white">
+    <div class="flex items-center justify-center lg:justify-start mx-auto py-4">
+        <ul class="flex items-center font-medium md:p-0 bg-white">
                 <li class="border-r border-dashed border-gray-500 flex justify-center px-4">
                     <a href="/" class="block py-2 px-3" aria-current="page">
-                        <i class="fa-solid fa-home pr-2"></i>ホーム
+                        ホーム
+                    </a>
+                </li>
+                <li class="border-r border-dashed border-gray-500 flex justify-center px-4">
+                    <a href="{{route("admin.product-list.show")}}" class="block py-2 px-3" aria-current="page">
+                       商品一覧
                     </a>
                 </li>
                 {{--カテゴリー--}}
                 <li class="border-r border-dashed border-gray-500 flex justify-center px-4">
                     <div>
                         <button data-dropdown-toggle="category" class="py-2 px-3 text-center">
-                            <i class="fa-solid fa-list pr-2"></i>カテゴリー
+                            カテゴリー
                         </button>
                     </div>
 
@@ -30,7 +30,6 @@
                 {{--銃--}}
                 <li class="border-r border-dashed border-gray-500 flex justify-center px-4">
                     <button data-dropdown-toggle="gun" class="py-2 px-3">
-                        <i class="fa-solid fa-gun pr-2"></i>
                         銃
                     </button>
                     <!-- Dropdown menu -->
@@ -44,7 +43,6 @@
                 {{--弾--}}
                 <li class="border-r border-dashed border-gray-500 flex justify-center px-4">
                     <button data-dropdown-toggle="bullet" class="py-2 px-3">
-                        <i class="fa-solid fa-circle pr-2"></i>
                         弾
                     </button>
                     <!-- Dropdown menu -->
@@ -58,7 +56,6 @@
                 {{--その他--}}
                 <li class="border-r border-dashed border-gray-500 flex justify-center px-4">
                     <button data-dropdown-toggle="other" class="py-2 px-3">
-                        <i class="fa-solid fa-briefcase pr-2"></i>
                         その他
                     </button>
                     <!-- Dropdown menu -->
@@ -70,24 +67,11 @@
                     </div>
                 </li>
                 {{--マイページ--}}
-                <li class="border-r border-dashed border-gray-500 flex justify-center px-4 py-2">
-                    <x-dash-nav-li-component icon="fa-solid fa-user" title="マイページ" url="profile.edit"/>
-                </li>
-                {{--ログアウト--}}
-                <li class="flex justify-center px-4">
-                    <form method="POST" action="{{ route('logout') }}">
-                        @csrf
-                        <a href="{{route('logout')}}"
-                           onclick="event.preventDefault();
-                                                this.closest('form').submit();">
-                            <div class="flex pl-2 items-center gap-4">
-                                <i class="fa-solid fa-arrow-right-from-bracket"></i>
-                                <p>ログアウト</p>
-                            </div>
-                        </a>
-                    </form>
+                <li class="border-gray-500 flex justify-center px-4 py-2">
+                    <a href="{{route("profile.edit")}}" class="block py-2 px-3" aria-current="page">
+                        マイページ
+                    </a>
                 </li>
             </ul>
-        </div>
     </div>
 </nav>

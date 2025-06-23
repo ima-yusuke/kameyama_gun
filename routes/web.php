@@ -9,17 +9,19 @@ use App\Http\Controllers\AdminCategoryController;
 use App\Http\Controllers\AdminBulletController;
 use App\Http\Controllers\AdminOtherController;
 
-//トップページ表示
-Route::get('/', [MainController::class, 'show'])->name('show');
+
 
 //商品一覧ページ表示
-Route::get('/product-list', [ProductListController::class, 'Show'])->name('product-list.show');
+Route::get('/', [ProductListController::class, 'Show'])->name('product-list.show');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
+    //トップページ表示
+    Route::get('/dashboard/product-list', [MainController::class, 'show'])->name('admin.product-list.show');
+
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
