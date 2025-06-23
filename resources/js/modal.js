@@ -18,13 +18,10 @@ window.OpenGunModal =function (e) {
 
     // 以下、モダルに表示する内容を設定
 
-    // 品名とモデル
+    //品名
     const modalTitle = document.getElementById('modal_title');
-    if (gunDetail.model == null) {
-        modalTitle.textContent = `品名：${data.name} / モデル：お問合せ下さい`;
-    } else {
-        modalTitle.textContent = `品名：${data.name} / モデル：${gunDetail.model}`;
-    }
+    modalTitle.textContent = data.name;
+
     //画像
     const modalImage = document.getElementById('modal_image');
     const baseUrl = modalImage.getAttribute("data-base-url");//asset関数後のベースURL
@@ -36,6 +33,9 @@ window.OpenGunModal =function (e) {
         modalImage.classList.remove('hidden');
         modalImage.src = `${baseUrl}/${data.id}/${gunDetail.image}`;
     }
+    // 品番
+    const modalId = document.getElementById('modal_id');
+    modalId.textContent = data.id;
     // カテゴリー
     const modalCategory = document.getElementById('modal_category');
     modalCategory.textContent = category.name;
@@ -59,6 +59,13 @@ window.OpenGunModal =function (e) {
         modalBrand.textContent = 'お問合せ下さい';
     } else {
         modalBrand.textContent = gunDetail.brand;
+    }
+    // モデル
+    const modalModel = document.getElementById('modal_model');
+    if(gunDetail.model == null){
+        modalModel.textContent = 'お問合せ下さい';
+    } else {
+        modalModel.textContent = gunDetail.model;
     }
     // 全長
     const modalFullLength = document.getElementById('modal_full_length');
@@ -110,9 +117,12 @@ window.OpenBulletOtherModal =function (e) {
     let data = JSON.parse(e.currentTarget.getAttribute("data-item"));//itemsテーブル
     let category = JSON.parse(e.currentTarget.getAttribute("data-category"));//categoriesテーブル
 
-    // 品名とモデル
+    // 品名
     const modalTitle = document.getElementById('bullet_other_modal_title');
-    modalTitle.textContent = `品名：${data.name}`;
+    modalTitle.textContent = data.name;
+    //品番
+    const modalId = document.getElementById('bullet_other_modal_id');
+    modalId.textContent = data.id;
     // カテゴリー
     const modalCategory = document.getElementById('bullet_other_modal_category');
     modalCategory.textContent = category.name;

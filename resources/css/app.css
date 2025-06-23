@@ -89,3 +89,8 @@
     color: #555555;
     font-weight: 600;
 }
+
+
+#default-tab button[aria-selected="true"] {
+    @apply bg-white;
+}

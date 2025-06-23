@@ -1,7 +1,7 @@
 <x-template>
     {{--取扱商品一覧--}}
     <section class="py-8 flex flex-col gap-8">
-        <h1 class="text-4xl font-bold text-center w-full">取扱商品</h1>
+        <h1 class="text-xl md:text-4xl font-bold text-center w-full">取扱商品</h1>
 
         {{--tabコンテンツ--}}
         <div id="default-tab-content">
