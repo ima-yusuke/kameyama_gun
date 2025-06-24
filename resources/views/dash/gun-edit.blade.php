@@ -6,9 +6,7 @@
                 <th class="border border-gray-500 px-4 py-2">/</th>
                 <th class="border border-gray-500 px-4 py-2">品名</th>
                 <th class="border border-gray-500 px-4 py-2 whitespace-nowrap">カテゴリー</th>
-                <th class="border border-gray-500 px-4 py-2">料金</th>
                 <th class="border border-gray-500 px-4 py-2 whitespace-nowrap">在庫</th>
-                <th class="border border-gray-500 px-4 py-2">備考欄</th>
                 <th class="border border-gray-500 px-4 py-2">編集</th>
                 <th class="border border-gray-500 px-4 py-2">削除</th>
             </tr>
@@ -26,17 +24,11 @@
                             {{$item->category["name"]}}
                         </div>
                     </td>
-                    <td class="border border-gray-500 px-4 py-2">
-                        <div class="flex justify-center items-center">
-                            {{ $item['price']==null?"未設定": "￥" .number_format($item['price'])}}
-                        </div>
-                    </td>
                     <td class="border border-gray-500 px-4 py-2 {{$item['is_stock'] === 1 ? 'text-green-700':'text-red-500'}}">
                         <div class="flex justify-center items-center">
                             {{ $item["is_stock"]===1?"有":"無"}}
                         </div>
                     </td>
-                    <td class="border border-gray-500 px-4 py-2">{{ $item["note"] }}</td>
                     <td class="border border-gray-500 px-4 py-2">
                         <div class="flex justify-center items-center">
                             <button data-gun="{{json_encode($item)}}" data-gun-detail="{{json_encode($item->gunDetail)}}" data-category="{{json_encode($item->category)}}" onclick="OpenGunEditModal(event)" class="bg-blue-500 text-white px-4 py-1 rounded-lg whitespace-nowrap">編集</button>
@@ -55,11 +47,11 @@
 
     <!--modal -->
     <div id="gun_edit_modal" class="hidden fixed top-1/2 transform -translate-y-1/2 inset-0 z-50 flex justify-center items-center w-full h-[80%] overflow-y-scroll">
-        <div class="relative p-4 w-[85%] h-full">
+        <div class="relative p-4 w-[90%] h-full">
             <!-- Modal content -->
             <div class="relative bg-white rounded-lg shadow-sm dark:bg-gray-700 w-full">
                 <!-- Modal header -->
-                <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600 border-gray-200">
+                <div class="w-full flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600 border-gray-200">
                     {{--品名--}}
                     <h3 id="gun_modal_title" class="text-xl font-semibold text-gray-900 dark:text-white"></h3>
                     {{--閉じるボタン--}}
@@ -72,7 +64,7 @@
                 </div>
                 <!-- Modal body -->
                 <div class="p-4 md:p-5 space-y-4 w-full">
-                    <form enctype="multipart/form-data" method="post" action="{{route("admin.gun.update")}}"  class="w-[90%] flex flex-col gap-2">
+                    <form enctype="multipart/form-data" method="post" action="{{route("admin.gun.update")}}"  class="w-[100%] flex flex-col gap-2">
                         @csrf
                         {{--品名--}}
                         <x-dash-form-component :flag="true" title="品名">

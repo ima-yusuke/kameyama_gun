@@ -156,7 +156,7 @@
                         data-gun='${JSON.stringify(data)}'
                         data-gun-detail='${JSON.stringify(data.gun_detail)}'
                         data-category='${JSON.stringify(data.category)}'
-                        onclick="OpenModal(event)"
+                        onclick="OpenGunModal(event)"
                     >
                         ${data.id}<br>詳細
                     </button>
