@@ -6,14 +6,14 @@
         <!-- ヘッダー（固定） -->
         <div class="relative flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600 border-gray-200">
             {{-- 品名 --}}
-            <h3 id="modal_title" class="md:text-xl font-semibold text-gray-900 dark:text-white"></h3>
+            <h3 id="modal_title" class="break-all md:text-xl font-semibold text-gray-900 dark:text-white"></h3>
 
             {{-- 閉じるボタン：親の relative を基準に絶対配置 --}}
             <button
                 onclick="CloseGunModal()"
                 type="button"
                 id="modal-close-btn"
-                class="z-50 absolute top-4 right-4 text-red-500 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg w-8 h-8 inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                class="text-red-500 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg w-8 h-8 inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
                 data-modal-hide="static-modal"
             >
                 <svg class="w-6 h-6 font-bold" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
@@ -37,7 +37,7 @@
                 >
             </div>
 
-            <aside class="flex flex-col md:flex-row md:flex-wrap gap-4 w-full">
+            <aside class="flex flex-col md:flex-row md:flex-wrap md:justify-between gap-4 w-full">
                 {{--品番--}}
                 <div class="flex flex-col items-center gap-2 w-full md:w-[45%]">
                     <p class="bg-gray-600 text-white py-1 w-full text-center">品番</p>
@@ -72,7 +72,7 @@
 
             <hr class="border-dashed border-gray-500">
 
-            <aside class="flex flex-wrap gap-4 w-full">
+            <aside class="flex flex-wrap justify-between gap-4 w-full">
                 {{-- 全長 --}}
                 <div class="flex flex-col items-center gap-2 w-full md:w-[45%]">
                     <p class="bg-gray-600 text-white py-1 w-full text-center">全長</p>

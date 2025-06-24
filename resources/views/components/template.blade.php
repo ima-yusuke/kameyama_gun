@@ -62,7 +62,7 @@
         {{ $slot }}
     </main>
 
-    <footer class="h-[5dvh] flex items-center justify-center bg-[#B8955F]">
+    <footer class="h-auto py-2 flex flex-col gap-2 items-center justify-center bg-[#B8955F]">
         <p class="text-sm font-bold tracking-widest">© Kameyama-gunshop</p>
     </footer>
 

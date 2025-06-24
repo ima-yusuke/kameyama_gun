@@ -49,12 +49,11 @@ class AdminBulletController extends Controller
     {
         $item = Item::find($request->id);
         $item->name = $request->name;
-        $item->price = $request->price;
+        $item->price = str_replace(',', '', $request->price);
         $item->is_stock = $request->is_stock;
         $item->category_id = $request->category_id;
         $item->note = $request->note;
         $item->save();
-
         return redirect()->route('admin.bullet.edit');
     }
 

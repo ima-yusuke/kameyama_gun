@@ -69,10 +69,10 @@ window.OpenGunModal =function (e) {
     }
     // 全長
     const modalFullLength = document.getElementById('modal_full_length');
-    modalFullLength.textContent = gunDetail.full_length;
+    modalFullLength.textContent = `${gunDetail.full_length} (cm)`;
     // 総重量
     const modalFullWeight = document.getElementById('modal_full_weight');
-    modalFullWeight.textContent = gunDetail.full_weight;
+    modalFullWeight.textContent = `${gunDetail.full_weight} (kg)`;
     // 口径
     const modalDiameter = document.getElementById('modal_diameter');
     modalDiameter.textContent = gunDetail.diameter;

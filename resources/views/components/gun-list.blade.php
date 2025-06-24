@@ -1,18 +1,26 @@
 {{--現在のカテゴリーを表示する要素--}}
 <h1 id="current_category" class="w-full font-bold text-xl p-6">全ての銃</h1>
 
-<section class="flex gap-4 w-full px-4 h-[70vh]">
+<section class="flex gap-4 w-full px-4 h-full">
     {{-- テーブル表示エリア --}}
     <div class="w-[83%] h-full overflow-y-auto">
-        <table class="w-full">
+        <table class="w-full table-fixed">
+            <colgroup>
+                <!-- 1列目：ID は固定 3rem -->
+                <col class="w-20">
+                <!-- 2列目：品名はテーブル幅の40% -->
+                <col class="w-[40%]">
+                <!-- 3列目：カテゴリーは自動 -->
+                <col>
+                <!-- 4列目：在庫は固定 5rem -->
+                <col class="w-20">
+            </colgroup>
             <thead class="sticky top-0 bg-white z-10">
             <tr>
                 <th class="border border-gray-500 py-2">/</th>
-                <th class="border border-gray-500 px-4 py-2 whitespace-nowrap">品名</th>
-                <th class="border border-gray-500 px-4 py-2 whitespace-nowrap">カテゴリー</th>
-                <th class="border border-gray-500 px-4 py-2">料金</th>
-                <th class="border border-gray-500 px-4 py-2 whitespace-nowrap">在庫</th>
-                <th class="border border-gray-500 px-4 py-2">備考欄</th>
+                <th class="border border-gray-500 px-4 py-2">品名</th>
+                <th class="border border-gray-500 px-4 py-2">カテゴリー</th>
+                <th class="border border-gray-500 px-4 py-2">在庫</th>
             </tr>
             </thead>
             <tbody id="default_tbody">
@@ -28,11 +36,9 @@
                             </button>
                         </div>
                     </td>
-                    <td class="border border-gray-500 px-4 py-2 whitespace-nowrap">{{ $data["name"] }}</td>
+                    <td class="border border-gray-500 px-4 py-2 break-all">{{ $data["name"] }}</td>
                     <td class="border border-gray-500 px-4 py-2 text-center">{{ $data->category["name"] }}</td>
-                    <td class="border border-gray-500 px-4 py-2 text-center whitespace-nowrap">{{ $data['price']==null?"-": "￥" .number_format($data['price'])}}</td>
                     <td class="border border-gray-500 px-4 py-2 text-center {{ $data['is_stock'] === 1 ? 'text-green-700':'text-red-500'}}">{{ $data["is_stock"]===1?"有":"無" }}</td>
-                    <td class="border border-gray-500 px-4 py-2">{{ $data["note"] }}</td>
                 </tr>
             @endforeach
             </tbody>
@@ -162,15 +168,10 @@
                     </button>
                 </div>
             </td>
-            <td class="border border-gray-500 px-4 py-2">${data.name}</td>
+            <td class="border border-gray-500 px-4 py-2 break-all">${data.name}</td>
             <td class="border border-gray-500 px-4 py-2">
                 <div class="flex justify-center items-center">
                     ${data.category.name}
-                </div>
-            </td>
-            <td class="border border-gray-500 px-4 py-2">
-                <div class="flex justify-center items-center">
-                    ${data.price == null ? "-" : "￥" + new Intl.NumberFormat().format(data.price)}
                 </div>
             </td>
             <td class="border border-gray-500 px-4 py-2 ${data.is_stock === 1 ? 'text-green-700' : 'text-red-500'}">
@@ -178,7 +179,6 @@
                     ${data.is_stock === 1 ? "有" : "無"}
                 </div>
             </td>
-            <td class="border border-gray-500 px-4 py-2">${data.note == null ? "" :data.note}</td>
         `;
 
         tableBody.appendChild(row);
@@ -302,7 +302,6 @@
 
                 // 1つ前のデータをMapから取得
                 let savedTbody  = previousTbodyData.get(parentIdArray[parentIdArray.length - 1]);
-                console.log(savedTbody)
                 // 現在のtbodyを削除
                 if(document.getElementById("new_tbody") !== null){
                     document.getElementById("new_tbody").remove();

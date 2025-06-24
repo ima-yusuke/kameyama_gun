@@ -12,7 +12,7 @@
             <h1 class="border-b border-[#B8955F] text-[#B8955F] w-full text-xl md:text-2xl font-bold pb-2">{{$category["name"]}}</h1>
 
             {{--同じカテゴリーの商品グループ--}}
-            <div class="w-full h-full flex flex-col md:flex-row md:flex-wrap md:justify-start justify-center items-center gap-10">
+            <div class="w-full h-full flex flex-col justify-center items-center md:flex-row md:flex-wrap md:justify-start md:items-start gap-10">
                 @foreach($category->items as $item)
                     {{--商品--}}
                     <div class="w-full md:w-[45%] lg:w-[20%] flex flex-col gap-4">

@@ -1,6 +1,20 @@
 <x-app-layout>
     <section class="w-full h-full flex items-start justify-center p-10">
-        <table class="w-[90%]">
+        <table class="table-fixed w-full max-w-[95%]">
+            <colgroup>
+                <!-- 1列目：ID は固定 3rem -->
+                <col class="w-12">
+                <!-- 2列目：品名はテーブル幅の40% -->
+                <col class="w-[40%]">
+                <!-- 3列目：カテゴリーは自動 -->
+                <col>
+                <!-- 4列目：在庫は固定 5rem -->
+                <col class="w-20">
+                <!-- 4列目：在庫は固定 5rem -->
+                <col class="w-20">
+                <!-- 4列目：在庫は固定 5rem -->
+                <col class="w-20">
+            </colgroup>
             <thead>
             <tr>
                 <th class="border border-gray-500 px-4 py-2">/</th>
@@ -17,8 +31,12 @@
                     @continue;
                 @endif
                 <tr>
-                    <td class="border border-gray-500 px-4 py-2">{{ $item["id"] }}</td>
-                    <td class="border border-gray-500 px-4 py-2 whitespace-nowrap">{{ $item["name"] }}</td>
+                    <td class="border border-gray-500 px-4 py-2">
+                        <div class="flex justify-center items-center">
+                        {{ $item["id"] }}
+                        </div>
+                    </td>
+                    <td class="border border-gray-500 px-4 py-2">{{ $item["name"] }}</td>
                     <td class="border border-gray-500 px-4 py-2">
                         <div class="flex justify-center items-center">
                             {{$item->category["name"]}}
@@ -87,7 +105,7 @@
                         </x-dash-form-component>
                         {{--料金--}}
                         <x-dash-form-component :flag="false" title="料金">
-                            <input type="number" id="other_modal_price" placeholder="例）3000" name="price" class="rounded-lg">
+                            <input type="text" id="other_modal_price" placeholder="例）3000" name="price" class="rounded-lg">
                         </x-dash-form-component>
                         {{--備考欄--}}
                         <x-dash-form-component :flag="false" title="備考欄">
@@ -197,7 +215,7 @@
             }
             // 料金
             const modalPrice = document.getElementById('other_modal_price');
-            modalPrice.value = data.price;
+            modalPrice.value = Number(data.price).toLocaleString('en-US');
             // 備考欄
             const modalNote = document.getElementById('other_modal_note');
             modalNote.value = data.note;
