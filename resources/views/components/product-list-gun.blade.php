@@ -12,17 +12,17 @@
             <h1 class="border-b border-[#B8955F] text-[#B8955F] w-full text-xl md:text-2xl font-bold pb-2">{{$category["name"]}}</h1>
 
             {{--同じカテゴリーの商品グループ--}}
-            <div class="w-full h-full flex flex-col md:flex-row md:flex-wrap md:justify-start justify-center items-center gap-y-10">
+            <div class="w-full h-full flex flex-col md:flex-row md:flex-wrap md:justify-start justify-center items-center gap-10">
                 @foreach($category->items as $item)
                     {{--商品--}}
-                    <div class="w-full md:w-[20%] flex flex-col gap-4">
+                    <div class="w-full md:w-[45%] lg:w-[20%] flex flex-col gap-4">
                         @if($item->gunDetail["image"]!=null)
-                            <img src="{{ asset('storage/img/' . $item['id']."/". $item->gunDetail['image'] )}}" alt="{{ $item->gunDetail['name'] }}" class="w-full h-auto md:w-64 md:h-64 object-cover">
+                            <img src="{{ asset('storage/img/' . $item['id']."/". $item->gunDetail['image'] )}}" alt="{{ $item->gunDetail['name'] }}" class="w-full h-auto md:h-64 object-cover">
                         @else
-                            <img src="{{ asset('storage/img/logo_1.jpg') }}" alt="gun" class="w-64 h-64 object-cover">
+                            <img src="{{ asset('storage/img/logo_1.jpg') }}" alt="gun" class="w-full h-auto md:h-64 object-cover">
                         @endif
                         <aside class="w-full flex flex-col items-start">
-                            <p class="font-bold">{{$item["name"]}}</p>
+                            <p class="font-bold break-all">{{$item["name"]}}</p>
                             <p class="font-bold">
                                 @if($item["price"]==null)
                                     価格お問合せ下さい

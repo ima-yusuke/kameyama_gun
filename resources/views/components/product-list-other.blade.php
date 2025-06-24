@@ -12,12 +12,12 @@
             <h1 class="border-b border-[#B8955F] text-[#B8955F] w-full text-xl md:text-2xl font-bold pb-2">{{$category["name"]}}</h1>
 
             {{--同じカテゴリーの商品グループ--}}
-            <div class="w-full h-full flex flex-col md:flex-row md:flex-wrap md:justify-start justify-center items-center gap-10">
+            <div class="w-full h-full flex flex-col md:flex-row md:flex-wrap md:justify-start justify-center md:items-start gap-10">
                 @foreach($category->items as $item)
                     {{--商品--}}
-                    <div class="w-full md:w-[20%] flex flex-col p-4 border rounded">
+                    <div class="w-full md:w-[45%] lg:w-[20%] flex flex-col p-4 border rounded">
                         <aside class="w-full flex flex-col items-start">
-                            <p class="font-bold">{{$item["name"]}}</p>
+                            <p class="font-bold break-all">{{$item["name"]}}</p>
                             <p class="font-bold">
                                 @if($item["price"]==null)
                                     価格お問合せ下さい
