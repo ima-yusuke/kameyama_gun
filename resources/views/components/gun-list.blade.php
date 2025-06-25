@@ -1,7 +1,7 @@
 {{--現在のカテゴリーを表示する要素--}}
 <h1 id="current_category" class="w-full font-bold text-xl p-6">全ての銃</h1>
 
-<section class="flex gap-4 w-full px-4 h-full">
+<section class="flex gap-4 w-full p-4 h-full">
     {{-- テーブル表示エリア --}}
     <div class="w-[83%] h-full overflow-y-auto">
         <table class="w-full table-fixed">
@@ -46,7 +46,7 @@
     </div>
 
     {{-- フィルターメニュー --}}
-    <div class="w-[17%] h-full overflow-y-auto">
+    <div class="w-[17%] h-full overflow-y-auto pb-4">
         <ul class="w-full flex flex-col gap-6 text-sm font-medium text-center" id="default-tab" data-tabs-toggle="#default-tab-content" role="tablist">
             <li class="w-full flex items-center justify-center">
                 <button class="button-21-gray !bg-gray-700 w-full !text-white px-4 py-2 rounded-lg">
