@@ -63,11 +63,11 @@
     </main>
 
     {{--ユーザー画面のみfooter表示--}}
-    @if(request()->routeIs('product-list.show'))
+{{--    @if(request()->routeIs('product-list.show'))--}}
         <footer class="w-full h-auto py-2 flex flex-col gap-2 items-center justify-center bg-[#B8955F]">
             <p class="text-sm font-bold tracking-widest">© Kameyama-gunshop</p>
         </footer>
-    @endif
+{{--    @endif--}}
 
     {{--モーダルウィンドウ--}}
 
