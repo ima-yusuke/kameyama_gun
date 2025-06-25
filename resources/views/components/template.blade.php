@@ -58,7 +58,7 @@
         </ul>
     </header>
 
-    <main class="flex-1 overflow-y-scroll py-2 md:py-4">
+    <main class="flex-1 overflow-y-scroll py-8 md:py-4">
         {{ $slot }}
     </main>
 
