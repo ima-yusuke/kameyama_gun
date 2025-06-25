@@ -16,9 +16,9 @@
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     @vite(['resources/css/app.css', 'resources/js/app.js','resources/js/modal.js'])
 </head>
-<body class="min-h-[100svh] h-screen overflow-hidden flex flex-col bg-[#FAFAFA]">
+<body class="min-h-screen flex flex-col bg-[#FAFAFA]">
 
-    <header>
+    <header class="sticky top-0 left-0 right-0 h-16">
         {{--ルートのnameが'product-list.show'のみ公式ホームページのメニュー表示（管理画面では非表示）--}}
         @if(request()->routeIs('product-list.show'))
             <x-product-list-nav />
@@ -58,13 +58,13 @@
         </ul>
     </header>
 
-    <main class="flex-1 overflow-y-scroll py-8 md:py-4">
+    <main class="flex-1 overflow-y-scroll pt-16">
         {{ $slot }}
     </main>
 
     {{--ユーザー画面のみfooter表示--}}
     @if(request()->routeIs('product-list.show'))
-        <footer class="mt-auto w-full h-auto py-2 flex flex-col gap-2 items-center justify-center bg-[#B8955F]">
+        <footer class="py-2 mt-auto w-full flex flex-col items-center justify-center bg-[#B8955F]">
             <p class="text-sm font-bold tracking-widest">© Kameyama-gunshop</p>
         </footer>
     @endif
