@@ -64,7 +64,7 @@
 
     {{--ユーザー画面のみfooter表示--}}
     @if(request()->routeIs('product-list.show'))
-        <footer class="fixed bottom-0 w-full h-auto py-2 flex flex-col gap-2 items-center justify-center bg-[#B8955F]">
+        <footer class="w-full h-auto py-2 flex flex-col gap-2 items-center justify-center bg-[#B8955F]">
             <p class="text-sm font-bold tracking-widest">© Kameyama-gunshop</p>
         </footer>
     @endif
