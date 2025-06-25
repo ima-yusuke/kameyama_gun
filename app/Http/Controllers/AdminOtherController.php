@@ -50,7 +50,12 @@ class AdminOtherController extends Controller
     {
         $item = Item::find($request->id);
         $item->name = $request->name;
-        $item->price = $request->price;
+        if($request->price == null) {
+            $item->price = 0; // 価格が入力されていない場合は0に設定
+        } else {
+            // カンマを削除して数値として保存
+            $item->price = str_replace(',', '', $request->price);
+        }
         $item->is_stock = $request->is_stock;
         $item->category_id = $request->category_id;
         $item->note = $request->note;

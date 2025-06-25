@@ -1,14 +1,28 @@
 <x-app-layout>
-    <section class="min-w-full h-full flex items-start justify-center p-10">
-        <table class="w-full">
+    <section class="min-w-full w-full h-full flex items-start justify-center p-10">
+        <!-- table-fixed で固定レイアウト -->
+        <table class="table-fixed w-full max-w-[95%]">
+            <colgroup>
+                <!-- 1列目：ID は固定 3rem -->
+                <col class="w-12">
+                <!-- 2列目：品名はテーブル幅の40% -->
+                <col class="w-[40%]">
+                <!-- 3列目：カテゴリーは自動 -->
+                <col>
+                <!-- 4列目：在庫は固定 5rem -->
+                <col class="w-20">
+                <!-- 4列目：在庫は固定 5rem -->
+                <col class="w-20">
+                <!-- 4列目：在庫は固定 5rem -->
+                <col class="w-20">
+            </colgroup>
+
             <thead>
             <tr>
                 <th class="border border-gray-500 px-4 py-2">/</th>
                 <th class="border border-gray-500 px-4 py-2">品名</th>
                 <th class="border border-gray-500 px-4 py-2 whitespace-nowrap">カテゴリー</th>
-                <th class="border border-gray-500 px-4 py-2">料金</th>
                 <th class="border border-gray-500 px-4 py-2 whitespace-nowrap">在庫</th>
-                <th class="border border-gray-500 px-4 py-2">備考欄</th>
                 <th class="border border-gray-500 px-4 py-2">編集</th>
                 <th class="border border-gray-500 px-4 py-2">削除</th>
             </tr>
@@ -16,35 +30,50 @@
             <tbody>
             @foreach ($items as $item)
                 @if($item->category["role"]!=0)
-                    @continue;
+                    @continue
                 @endif
                 <tr>
-                    <td class="border border-gray-500 px-4 py-2">{{ $item["id"] }}</td>
-                    <td class="border border-gray-500 px-4 py-2">{{ $item["name"] }}</td>
                     <td class="border border-gray-500 px-4 py-2">
                         <div class="flex justify-center items-center">
-                            {{$item->category["name"]}}
+                        {{ $item["id"] }}
+                        </div>
+                    </td>
+                    <!-- w-[30%] を固定し、折り返しを許可 -->
+                    <td class="border border-gray-500 px-4 py-2 w-[30%] break-all">
+                        {{ $item["name"] }}
+                    </td>
+                    <td class="border border-gray-500 px-4 py-2">
+                        <div class="flex justify-center items-center">
+                            {{ $item->category["name"] }}
+                        </div>
+                    </td>
+                    <td class="border border-gray-500 px-4 py-2 {{ $item['is_stock']===1?'text-green-700':'text-red-500' }}">
+                        <div class="flex justify-center items-center">
+                            {{ $item["is_stock"]===1?"有":"無" }}
                         </div>
                     </td>
                     <td class="border border-gray-500 px-4 py-2">
                         <div class="flex justify-center items-center">
-                            {{ $item['price']==null?"未設定": "￥" .number_format($item['price'])}}
-                        </div>
-                    </td>
-                    <td class="border border-gray-500 px-4 py-2 {{$item['is_stock'] === 1 ? 'text-green-700':'text-red-500'}}">
-                        <div class="flex justify-center items-center">
-                            {{ $item["is_stock"]===1?"有":"無"}}
-                        </div>
-                    </td>
-                    <td class="border border-gray-500 px-4 py-2">{{ $item["note"] }}</td>
-                    <td class="border border-gray-500 px-4 py-2">
-                        <div class="flex justify-center items-center">
-                            <button data-gun="{{json_encode($item)}}" data-gun-detail="{{json_encode($item->gunDetail)}}" data-category="{{json_encode($item->category)}}" onclick="OpenGunEditModal(event)" class="bg-blue-500 text-white px-4 py-1 rounded-lg whitespace-nowrap">編集</button>
+                            <button
+                                data-gun="{{ json_encode($item) }}"
+                                data-gun-detail="{{ json_encode($item->gunDetail) }}"
+                                data-category="{{ json_encode($item->category) }}"
+                                onclick="OpenGunEditModal(event)"
+                                class="bg-blue-500 text-white px-4 py-1 rounded-lg whitespace-nowrap"
+                            >
+                                編集
+                            </button>
                         </div>
                     </td>
                     <td class="border border-gray-500 px-4 py-2">
                         <div class="flex justify-center items-center">
-                            <a onclick="return confirm('本当に削除しますか？');" href="{{ route('admin.gun.delete', $item['id']) }}" class="bg-red-500 text-white px-4 py-1 rounded-lg whitespace-nowrap">削除</a>
+                            <a
+                                onclick="return confirm('本当に削除しますか？');"
+                                href="{{ route('admin.gun.delete', $item['id']) }}"
+                                class="bg-red-500 text-white px-4 py-1 rounded-lg whitespace-nowrap"
+                            >
+                                削除
+                            </a>
                         </div>
                     </td>
                 </tr>
@@ -55,11 +84,11 @@
 
     <!--modal -->
     <div id="gun_edit_modal" class="hidden fixed top-1/2 transform -translate-y-1/2 inset-0 z-50 flex justify-center items-center w-full h-[80%] overflow-y-scroll">
-        <div class="relative p-4 w-[85%] h-full">
+        <div class="relative p-4 w-[90%] h-full">
             <!-- Modal content -->
             <div class="relative bg-white rounded-lg shadow-sm dark:bg-gray-700 w-full">
                 <!-- Modal header -->
-                <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600 border-gray-200">
+                <div class="w-full flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600 border-gray-200">
                     {{--品名--}}
                     <h3 id="gun_modal_title" class="text-xl font-semibold text-gray-900 dark:text-white"></h3>
                     {{--閉じるボタン--}}
@@ -72,7 +101,7 @@
                 </div>
                 <!-- Modal body -->
                 <div class="p-4 md:p-5 space-y-4 w-full">
-                    <form enctype="multipart/form-data" method="post" action="{{route("admin.gun.update")}}"  class="w-[90%] flex flex-col gap-2">
+                    <form enctype="multipart/form-data" method="post" action="{{route("admin.gun.update")}}"  class="w-[100%] flex flex-col gap-2">
                         @csrf
                         {{--品名--}}
                         <x-dash-form-component :flag="true" title="品名">
@@ -94,11 +123,11 @@
                             </div>
                         </x-dash-form-component>
                         {{--全長--}}
-                        <x-dash-form-component :flag="true" title="全長">
+                        <x-dash-form-component :flag="true" title="全長（cm）">
                             <input type="number" id="gun_modal_full_length" step="any" required placeholder="例）125.6" name="full_length" class="rounded-lg">
                         </x-dash-form-component>
                         {{--総重量--}}
-                        <x-dash-form-component :flag="true" title="総重量">
+                        <x-dash-form-component :flag="true" title="総重量（kg）">
                             <input type="number" id="gun_modal_full_weight" step="any" required placeholder="例）125.6" name="full_weight" class="rounded-lg">
                         </x-dash-form-component>
                         {{--口径--}}
@@ -119,7 +148,7 @@
                         </x-dash-form-component>
                         {{--料金--}}
                         <x-dash-form-component :flag="false" title="料金">
-                            <input type="number" id="gun_modal_price"  placeholder="例）3000" name="price" class="rounded-lg">
+                            <input type="text" id="gun_modal_price"  placeholder="例）3000" name="price" class="rounded-lg">
                         </x-dash-form-component>
                         {{--画像--}}
                         <x-dash-form-component :flag="false" title="画像">
@@ -269,7 +298,7 @@
             modalDiameter.value = gunDetail.diameter;
             // 料金
             const modalPrice = document.getElementById('gun_modal_price');
-            modalPrice.value = data.price;
+            modalPrice.value = Number(data.price).toLocaleString('en-US');
             // 画像
             const modalImage = document.getElementById('gun_modal_img');
             const baseUrl = modalImage.getAttribute("data-base-url");//asset関数後のベースURL

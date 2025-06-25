@@ -5,7 +5,7 @@ import { VitePWA } from "vite-plugin-pwa";
 export default defineConfig({
     plugins: [
         laravel({
-            input: ['resources/css/app.css', 'resources/js/app.js'],
+            input: ['resources/css/app.css', 'resources/js/app.js', 'resources/js/modal.js'],
             refresh: true,
         }),
         VitePWA({
@@ -63,7 +63,8 @@ export default defineConfig({
         rollupOptions: {
             input: {
                 appCss: 'resources/css/app.css',
-                app: 'resources/js/app.js'
+                app: 'resources/js/app.js',
+                modal: 'resources/js/modal.js',
             }
         }
     }

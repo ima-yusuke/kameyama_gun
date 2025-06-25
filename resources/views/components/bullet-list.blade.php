@@ -1,8 +1,22 @@
 {{--一覧--}}
-<section class="flex gap-4 w-full px-4 h-[78vh]">
+<section class="flex gap-4 w-full px-4 h-full">
     {{-- テーブル表示エリア --}}
     <div class="w-full h-full overflow-y-auto">
-        <table class="min-w-full">
+        <table class="min-w-full table-fixed">
+            <colgroup>
+                <!-- 1列目：ID は固定 3rem -->
+                <col class="w-16">
+                <!-- 2列目：品名はテーブル幅の40% -->
+                <col class="w-[25%]">
+                <!-- 3列目：カテゴリーは自動 -->
+                <col>
+                <!-- 4列目：料金は自動 -->
+                <col class="w-20">
+                <!-- 5列目：在庫は固定 -->
+                <col class="w-16">
+                <!-- 6列目：備考欄は自動 -->
+                <col>
+            </colgroup>
             <thead>
             <tr>
                 <th class="border border-gray-500 px-4 py-2">/</th>
@@ -25,7 +39,7 @@
                             {{ $data["id"] }}
                         </div>
                     </td>
-                    <td class="border border-gray-500 px-4 py-4 whitespace-nowrap">{{ $data["name"] }}</td>
+                    <td class="border border-gray-500 px-4 py-4 break-all">{{ $data["name"] }}</td>
                     <td class="border border-gray-500 px-4 py-4">
                         <div class="flex justify-center items-center">
                             {{$data->category["name"]}}
@@ -41,7 +55,7 @@
                             {{ $data["is_stock"]===1?"有":"無"}}
                         </div>
                     </td>
-                    <td class="border border-gray-500 px-4 py-4">{{ $data["note"] }}</td>
+                    <td class="border border-gray-500 px-4 py-4 break-all">{{ $data["note"] }}</td>
                 </tr>
             @endforeach
             </tbody>
