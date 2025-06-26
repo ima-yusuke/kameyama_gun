@@ -30,7 +30,7 @@
                 <input type="number" step="any" required placeholder="例）125.6" name="full_weight" class="rounded-lg">
             </x-dash-form-component>
             {{--口径--}}
-            <x-dash-form-component :flag="true" title="口径">
+            <x-dash-form-component :flag="true" title="口径（番）">
                 <input type="number" step="any" required placeholder="例）40" name="diameter" class="rounded-lg">
             </x-dash-form-component>
             {{--メーカー--}}

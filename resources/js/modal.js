@@ -75,7 +75,7 @@ window.OpenGunModal =function (e) {
     modalFullWeight.textContent = `${gunDetail.full_weight} (kg)`;
     // 口径
     const modalDiameter = document.getElementById('modal_diameter');
-    modalDiameter.textContent = gunDetail.diameter;
+    modalDiameter.textContent = `${Math.trunc(gunDetail.diameter)} (番)`;
     // 在庫
     const modalStock = document.getElementById('modal_is_stock');
     if (data.is_stock == 1) {

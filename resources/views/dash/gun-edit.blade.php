@@ -131,7 +131,7 @@
                             <input type="number" id="gun_modal_full_weight" step="any" required placeholder="例）125.6" name="full_weight" class="rounded-lg">
                         </x-dash-form-component>
                         {{--口径--}}
-                        <x-dash-form-component :flag="true" title="口径">
+                        <x-dash-form-component :flag="true" title="口径（番）">
                             <input type="number" id="gun_modal_diameter" step="any" required placeholder="例）40" name="diameter" class="rounded-lg">
                         </x-dash-form-component>
                         {{--メーカー--}}
@@ -295,7 +295,7 @@
             modalFullWeight.value = gunDetail.full_weight;
             // 口径
             const modalDiameter = document.getElementById('gun_modal_diameter');
-            modalDiameter.value = gunDetail.diameter;
+            modalDiameter.value = Math.trunc(gunDetail.diameter);
             // 料金
             const modalPrice = document.getElementById('gun_modal_price');
             modalPrice.value = Number(data.price).toLocaleString('en-US');
